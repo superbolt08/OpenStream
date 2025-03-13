@@ -1,26 +1,45 @@
-version: '3.3'
+
 services:
-  app:
+  server:
     build: 
       context: .
       dockerfile: Dockerfile
-    container_name: app
+    container_name: server
+    env_file: .env.dev
     ports:
-      - '3000:3000'
+      - "${SERVER_PORT}:${SERVER_PORT}"
     volumes:
-      - .:/app
-      - /app/node_modules
-  mongo:
+      - .:/server
+      - /server/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
     image: mongo
-    container_name: mongodb_container
+    container_name: app-db
+    env_file: .env.dev
     ports:
-      - '27017:27017'
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=mongoadmin
-      - MONGO_INITDB_ROOT_PASSWORD=securepassword
+      - "${DB_PORT}:${DB_PORT}"
     restart: always
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.runCommand('ping').ok", "${MONGO_HOST}:${DB_PORT}/${MONGO_DB}?authSource=admin", "--quiet"]
+      interval: 90s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
     volumes:
-      - mongo-data:/data/db
+      - db-data:/data/db
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo_express
+    env_file: .env.dev
+    ports:
+      - "${MONGO_EXPRESS_PORT}:${MONGO_EXPRESS_PORT}"
+    depends_on:
+      db: 
+        condition: service_healthy
 
 volumes:
-  mongo-data:
+  db-data:
