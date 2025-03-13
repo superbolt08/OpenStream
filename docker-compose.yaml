@@ -4,7 +4,9 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
-    container_name: server
+      args: 
+        NODE_ENV: ${NODE_ENV}
+    container_name: open_stream
     env_file: .env.dev
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
