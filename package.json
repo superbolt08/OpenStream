@@ -12,6 +12,7 @@
     "migrate:all": "npx dotenv -e .env.dev -- npx prisma migrate reset && npx dotenv -e .env.dev -- npx prisma migrate dev"
   },
   "dependencies": {
+    "dotenv": "^16.4.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
