@@ -11,9 +11,12 @@
     "migrate:reset": "npx dotenv -e .env.dev -- npx prisma migrate reset",
     "migrate:all": "npx dotenv -e .env.dev -- npx prisma migrate reset && npx dotenv -e .env.dev -- npx prisma migrate dev"
   },
-  "dependencies": {
-    "dotenv": "^16.4.7"
-  },
+"dependencies": {
+    "dotenv": "^16.4.7",
+    "next": "^15.2.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+},
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/node": "^20.17.24",

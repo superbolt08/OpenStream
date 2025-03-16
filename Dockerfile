@@ -10,7 +10,8 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-EXPOSE 3000
+EXPOSE 3000 
+# Alternatively you could use 3001
 
 RUN echo $NODE_ENV
 CMD ["npm", "run", "dev"]

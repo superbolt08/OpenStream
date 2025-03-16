@@ -17,10 +17,16 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+## Set Up
+1. Run `npm i` to install packages. May need `sudo` if on WSL
+
 ### Running the Containers
 
-To build and start all the services, run the following command in your project directory:
+1. Make sure you have docker installed and open on your computer
+2. Navigate to the project folder
+3. Fill out the *.env.dev* file from the *.example.env.dev* file
 
+To build and start all the services, run the following command in your project directory:
 
 ```bash
 docker compose --env-file .env.dev up --build
