@@ -7,15 +7,19 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "migrate:dev": "npx dotenv -e .env.dev -- npx prisma migrate dev",
-    "migrate:reset": "npx dotenv -e .env.dev -- npx prisma migrate reset",
-    "migrate:all": "npx dotenv -e .env.dev -- npx prisma migrate reset && npx dotenv -e .env.dev -- npx prisma migrate dev"
+    "prisma:generate": "npx dotenv -e .env.dev -- npx prisma generate",
+    "db:push": "npx dotenv -e .env.dev -- npx prisma db push",
+    "app:start": "docker compose --env-file .env.dev up --build",
+    "app:stop": "docker compose --env-file .env.dev down"
   },
   "dependencies": {
-    "next": "^15.2.2",
+    "@prisma/client": "^6.5.0",
     "dotenv": "^16.4.7",
+    "next": "^15.2.2",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

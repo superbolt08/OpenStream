@@ -16,6 +16,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      websocket:
+        condition: service_healthy
 
   db:
     image: mongo
@@ -42,6 +44,24 @@ services:
     depends_on:
       db: 
         condition: service_healthy
+
+  websocket:
+    container_name: websocket
+    build:
+      context: ./websocket
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: ${NODE_ENV}
+    ports:
+      - "${SOCKET_PORT}:${SOCKET_PORT}"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${SOCKET_PORT}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /websocket/node_modules
+      - ./websocket:/websocket
 
 volumes:
   db-data:

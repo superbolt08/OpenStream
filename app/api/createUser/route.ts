@@ -1,0 +1,6 @@
+import { createUser } from "../lib/user";
+import { NextRequest } from "next/server";
+
+export async function POST(req: NextRequest) {
+    return createUser(req);
+}

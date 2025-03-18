@@ -12,5 +12,4 @@ RUN npm install
 COPY . .
 EXPOSE 3000
 
-RUN echo $NODE_ENV
 CMD ["npm", "run", "dev"]
