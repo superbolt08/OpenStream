@@ -1,5 +1,6 @@
 import express from 'express';
 import { Server } from "socket.io";
+import socketHandler from './sockets/index.js';
 
 const app = express();
 const PORT = process.env.SOCKET_PORT || 3005;
