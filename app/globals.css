@@ -40,3 +40,14 @@ a {
     color-scheme: dark;
   }
 }
+/* globals.css */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f3f3f3;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
