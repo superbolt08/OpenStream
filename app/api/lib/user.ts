@@ -22,7 +22,7 @@ export async function createUser(req: NextRequest) {
       { message: "User created susccesfully", user: user },
       { status: 200 }
     );
-  } catch (error: unknown) {
+  } catch (error: any) {
     return NextResponse.json({ error: "Error creating user" }, { status: 400 });
   }
 }

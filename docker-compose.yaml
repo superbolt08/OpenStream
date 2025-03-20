@@ -1,4 +1,3 @@
-
 services:
   server:
     build: 
@@ -7,7 +6,13 @@ services:
       args: 
         NODE_ENV: ${NODE_ENV}
     container_name: open_stream
-    env_file: .env.dev
+    command: >
+      sh -c "
+        npm run prisma:generate && 
+        npm run db:push &&
+        npm run dev
+      "
+    env_file: .env.development
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
     volumes:
@@ -19,30 +24,14 @@ services:
       websocket:
         condition: service_healthy
 
-  db:
-    image: mongo
-    container_name: app-db
-    env_file: .env.dev
-    ports:
-      - "${DB_PORT}:${DB_PORT}"
-    restart: always
-    healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.runCommand('ping').ok", "${MONGO_HOST}:${DB_PORT}/${MONGO_DB}?authSource=admin", "--quiet"]
-      interval: 90s
-      timeout: 30s
-      retries: 5
-      start_period: 30s
-    volumes:
-      - db-data:/data/db
-
   mongo-express:
     image: mongo-express
     container_name: mongo_express
-    env_file: .env.dev
+    env_file: .env.development
     ports:
       - "${MONGO_EXPRESS_PORT}:${MONGO_EXPRESS_PORT}"
     depends_on:
-      db: 
+      db:
         condition: service_healthy
 
   websocket:
@@ -63,5 +52,25 @@ services:
       - /websocket/node_modules
       - ./websocket:/websocket
 
+  db:
+    image: mongo
+    container_name: app-db
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+    env_file: .env.development
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    restart: always
+    healthcheck:
+      test: echo "try { rs.status() } catch (err) { rs.initiate() }" | mongosh --port ${DB_PORT} --quiet
+      interval: 5s
+      timeout: 30s
+      start_period: 0s
+      start_interval: 1s
+      retries: 30
+    volumes:
+      - db-data:/data/db
+      - db-config:/data/configdb
+
 volumes:
   db-data:
+  db-config:

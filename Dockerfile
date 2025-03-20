@@ -11,6 +11,5 @@ RUN npm install
 
 COPY . .
 EXPOSE 3000 
-# Alternatively you could use 3001
 
 CMD ["npm", "run", "dev"]
