@@ -5,7 +5,8 @@ services:
       dockerfile: Dockerfile
       args: 
         NODE_ENV: ${NODE_ENV}
-    container_name: open_stream
+    container_name: server
+    restart: always
     command: >
       sh -c "
         npm run prisma:generate && 

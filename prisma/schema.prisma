@@ -13,7 +13,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model Stream {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  streamKey  String   @unique
+  title      String
+  status     Boolean   
+  playbackUrl String
+  createdAt  DateTime @default(now())
+  chat Chat?
+}
+
+model Chat {
   id    String  @id @default(auto()) @map("_id") @db.ObjectId
-  name  String?
+  stream Stream @relation(fields: [streamId], references: [id])
+  streamId String @unique @db.ObjectId
 }

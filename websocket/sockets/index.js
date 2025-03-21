@@ -4,7 +4,7 @@ const socketHandler = (socket, io) => {
   console.log('A user connected:', socket.id);
 
   socket.on('newMessage', (newMessage) => {
-    socket.broadcast.emit('newMessage', newMessage);
+    io.emit('newMessage', newMessage);
   });
 
   socket.on('disconnect', () => {
