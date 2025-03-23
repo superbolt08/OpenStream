@@ -83,6 +83,13 @@ services:
       - "5080:5080"   # HLS streaming
       - "1935:1935"   # RTMP ingest
       - "443:443"     # HTTPS access (optional)
+    volumes:
+      - antmedia-webapps:/usr/local/antmedia/webapps
+      - antmedia-conf:/usr/local/antmedia/conf
+      - antmedia-logs:/usr/local/antmedia/log
+      - antmedia-plugins:/usr/local/antmedia/plugins         # For custom plugins
+      - antmedia-data:/usr/local/antmedia/data               # For recording & stream data
+      - antmedia-streams:/usr/local/antmedia/streams         # For HLS/DASH streams
     healthcheck:
       test: curl --fail http://localhost:5080 || exit 1
       interval: 30s
@@ -94,4 +101,9 @@ services:
 volumes:
   db-data:
   db-config:
-
+  antmedia-webapps:
+  antmedia-conf:
+  antmedia-logs:
+  antmedia-plugins:
+  antmedia-data:
+  antmedia-streams:
