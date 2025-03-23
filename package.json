@@ -16,6 +16,7 @@
   "dependencies": {
     "@prisma/client": "^6.5.0",
     "dotenv": "^16.4.7",
+    "express": "^4.21.2",
     "next": "^15.2.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

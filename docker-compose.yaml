@@ -72,6 +72,26 @@ services:
       - db-data:/data/db
       - db-config:/data/configdb
 
+  antmedia:
+    build: 
+      context: ./stream_server
+      dockerfile: Dockerfile
+      args:
+        AntMediaServer: "ant-media-server.zip"
+    container_name: antmedia
+    ports:
+      - "5080:5080"   # HLS streaming
+      - "1935:1935"   # RTMP ingest
+      - "443:443"     # HTTPS access (optional)
+    healthcheck:
+      test: curl --fail http://localhost:5080 || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+    entrypoint: /usr/local/antmedia/start.sh
+
 volumes:
   db-data:
   db-config:
+
