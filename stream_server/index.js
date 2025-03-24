@@ -1,9 +1,9 @@
-import express from 'express';
-import { Server } from 'socket.io';
-import http from 'http';
-import ffmpeg from 'fluent-ffmpeg';
-import os from 'os';
-import { prisma } from '../prisma/index.js';
+const express = require('express');
+const { Server } = require('socket.io');
+const http = require('http');
+const ffmpeg = require('fluent-ffmpeg');
+const os = require('os');
+const { prisma } = require('../prisma/index.js'); // Adjust the path as needed
 
 const app = express();
 const server = http.createServer(app);
