@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /websocket/node_modules
+/stream_server/node_modules
 /.pnp
 .pnp.*
 .yarn/*

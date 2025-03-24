@@ -22,6 +22,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "stream_server/index.js", "prisma/index.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "stream_server/index.ts", "prisma/index.js", "stream_server/tsconfig.json"],
   "exclude": ["node_modules"]
 }
