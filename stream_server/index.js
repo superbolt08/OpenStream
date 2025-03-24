@@ -1,14 +1,16 @@
-const express = require('express');
-const { Server } = require('socket.io');
-const http = require('http');
-const ffmpeg = require('fluent-ffmpeg');
-const os = require('os');
-const { prisma } = require('../prisma/index.js'); // Adjust the path as needed
+import express from 'express';
+import { Server } from 'socket.io';
+import http from 'http';
+import ffmpeg from 'fluent-ffmpeg';
+import ffmpegPath from 'ffmpeg-static';
+import os from 'os';
+ffmpeg.setFfmpegPath(ffmpegPath);
+import { prisma } from '../prisma/index.ts';
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
-const PORT = process.env.PORT || 4000;
+const STREAM_PORT = process.env.STREAM_PORT || 4000;
 
 // Function to get the correct webcam input based on OS
 const getWebcamInput = () => {
@@ -21,8 +23,8 @@ const getWebcamInput = () => {
     };
   } else if (platform === 'darwin') {
     return {
-      input: 'default', // Default webcam input for macOS
-      options: ['-f', 'avfoundation'], // avfoundation is the input format for macOS
+      input: '0:1', // Adjust based on your desired device indexes
+      options: ['-f', 'avfoundation'],
     };
   } else if (platform === 'win32') {
     return {
@@ -44,13 +46,14 @@ const startStream = async (streamId) => {
 
   const command = ffmpeg()
     .input(input)  // Webcam input based on OS
-    .inputOptions(options)    // Input options based on OS
+    .inputOptions([...options, '-framerate', '30']) // Add '-framerate' option
     .outputOptions([
       '-c:v libx264',         // Video codec
       '-preset veryfast',      // Encoding speed
       '-b:v 2500k',            // Bitrate
       '-c:a aac',              // Audio codec
-      '-b:a 128k'              // Audio bitrate
+      '-b:a 128k',              // Audio bitrate
+      '-f', 'flv'
     ])
     .output(rtmpUrl)
     .on('start', () => console.log(`Stream started: ${streamId}`))
@@ -60,14 +63,14 @@ const startStream = async (streamId) => {
   command.run();
 
   // Store stream in MongoDB
-  await prisma.stream.create({
-    data: {
-      streamKey: streamId,
-      title: `Stream ${streamId}`,
-      status: true,
-      playbackUrl: `http://localhost:5080/LiveApp/streams/${streamId}.m3u8`
-    }
-  });
+  // await prisma.stream.create({
+  //   data: {
+  //     streamKey: streamId,
+  //     title: `Stream ${streamId}`,
+  //     status: true,
+  //     playbackUrl: `http://localhost:5080/LiveApp/streams/${streamId}.m3u8`
+  //   }
+  // });
 };
 
 // Start stream endpoint
@@ -90,4 +93,4 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(STREAM_PORT, () => console.log(`Server running on port ${STREAM_PORT}`));
