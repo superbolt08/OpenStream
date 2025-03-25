@@ -14,17 +14,26 @@ datasource db {
 }
 
 model Stream {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  streamKey  String   @unique
-  title      String
-  status     Boolean   
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  streamKey   String   @unique
+  title       String
   playbackUrl String
-  createdAt  DateTime @default(now())
-  chat Chat?
+  createdAt   DateTime @default(now())
+  chat        Chat?
+  session     Session  @relation(fields: [sessionId], references: [id])
+  sessionId   String   @unique @db.ObjectId
 }
 
 model Chat {
-  id    String  @id @default(auto()) @map("_id") @db.ObjectId
-  stream Stream @relation(fields: [streamId], references: [id])
-  streamId String @unique @db.ObjectId
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  stream    Stream @relation(fields: [streamKey], references: [id])
+  streamKey String @unique @db.ObjectId
+}
+
+model Session {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  user      String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  stream    Stream?
 }

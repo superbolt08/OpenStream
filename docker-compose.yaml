@@ -1,11 +1,11 @@
 services:
-  server:
+  app_server:
     build: 
       context: .
       dockerfile: Dockerfile
       args: 
         NODE_ENV: ${NODE_ENV}
-    container_name: server
+    container_name: app_server
     restart: always
     command: >
       sh -c "
@@ -15,12 +15,12 @@ services:
       "
     env_file: .env.development
     ports:
-      - "${SERVER_PORT}:${SERVER_PORT}"
+      - "${MAIN_SERVER_PORT}:${MAIN_SERVER_PORT}"
     volumes:
-      - .:/server
-      - /server/node_modules
+      - .:/app_server
+      - /app_server/node_modules
     depends_on:
-      db:
+      mongo-db:
         condition: service_healthy
       websocket:
         condition: service_healthy
@@ -32,7 +32,7 @@ services:
     ports:
       - "${MONGO_EXPRESS_PORT}:${MONGO_EXPRESS_PORT}"
     depends_on:
-      db:
+      mongo-db:
         condition: service_healthy
 
   websocket:
@@ -43,9 +43,9 @@ services:
     environment:
       NODE_ENV: ${NODE_ENV}
     ports:
-      - "${SOCKET_PORT}:${SOCKET_PORT}"
+      - "${WEBSOCKET_SERVER_PORT}:${WEBSOCKET_SERVER_PORT}"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:${SOCKET_PORT}/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:${WEBSOCKET_SERVER_PORT}/health"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -53,9 +53,9 @@ services:
       - /websocket/node_modules
       - ./websocket:/websocket
 
-  db:
+  mongo-db:
     image: mongo
-    container_name: app-db
+    container_name: mongo_db
     command: ["--replSet", "rs0", "--bind_ip_all"]
     env_file: .env.development
     ports:
@@ -69,20 +69,20 @@ services:
       start_interval: 1s
       retries: 30
     volumes:
-      - db-data:/data/db
-      - db-config:/data/configdb
+      - mongo-db-data:/data/db
+      - mongo-db-config:/data/configdb
 
   antmedia:
     build: 
-      context: ./stream_server
+      context: ./antmedia
       dockerfile: Dockerfile
       args:
         AntMediaServer: "ant-media-server.zip"
     container_name: antmedia
     ports:
-      - "5080:5080"   # HLS streaming
-      - "1935:1935"   # RTMP ingest
-      - "443:443"     # HTTPS access (optional)
+      - "${HLS_BROADCAST_PORT}:${HLS_BROADCAST_PORT}"   # HLS streaming
+      - "${RTMP_SERVER_PORT}:${RTMP_SERVER_PORT}"   # RTMP ingest
+      - "${WEB_SERVER_PORT}:${WEB_SERVER_PORT}"   #webRTC
     volumes:
       - antmedia-webapps:/usr/local/antmedia/webapps
       - antmedia-conf:/usr/local/antmedia/conf
@@ -91,16 +91,31 @@ services:
       - antmedia-data:/usr/local/antmedia/data               # For recording & stream data
       - antmedia-streams:/usr/local/antmedia/streams         # For HLS/DASH streams
     healthcheck:
-      test: curl --fail http://localhost:5080 || exit 1
+      test: curl --fail http://${RTMP_SERVER_HOST}:${HLS_BROADCAST_PORT} || exit 1
       interval: 30s
       timeout: 10s
       retries: 5
     restart: unless-stopped
     entrypoint: /usr/local/antmedia/start.sh
 
+  stream-server:
+    container_name: stream_server
+    build:
+      context: ./stream_server
+      dockerfile: Dockerfile
+    env_file: .env.development
+    environment:
+      NODE_ENV: ${NODE_ENV}
+    ports:
+      - "${STREAM_PORT}:${STREAM_PORT}"
+    restart: always
+    volumes:
+      - /stream_server/node_modules
+      - ./stream_server:/stream-server
+
 volumes:
-  db-data:
-  db-config:
+  mongo-db-data:
+  mongo-db-config:
   antmedia-webapps:
   antmedia-conf:
   antmedia-logs:

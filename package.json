@@ -15,6 +15,7 @@
     "app:stop": "docker compose --env-file .env.development down"
   },
   "dependencies": {
+    "@antmedia/webrtc_adaptor": "^2.13.2",
     "@prisma/client": "^6.5.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
