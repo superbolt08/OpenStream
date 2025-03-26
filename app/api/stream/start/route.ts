@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
     const stream = await prisma.stream.create({
       data: {
         sessionId,
-        streamKey,
+        streamKey: randomUUID(),
         title,
         playbackUrl,
       },

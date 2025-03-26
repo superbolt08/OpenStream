@@ -7,66 +7,69 @@ const StreamPage = () => {
   const socket = useSocket();
   const [streamKey, setStreamKey] = useState("");
   const [streaming, setStreaming] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const streamRef = useRef<MediaStream | null>(null);
+  const videoRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const streamRef = useRef(null);
+
+  const startMediaRecording = (stream, streamKey) => {
+    // Determine supported mimeType
+    let mimeType = "video/webm; codecs=vp8,opus";
+    if (!MediaRecorder.isTypeSupported(mimeType)) {
+      console.warn(`${mimeType} not supported, falling back.`);
+      mimeType = "video/webm";
+      if (!MediaRecorder.isTypeSupported(mimeType)) {
+        console.warn(`${mimeType} is also not supported, using default settings.`);
+        mimeType = "";
+      }
+    }
+    const options = mimeType ? { mimeType } : undefined;
+    const mediaRecorder = new MediaRecorder(stream, options);
+    mediaRecorderRef.current = mediaRecorder;
+
+    // Send each chunk to the server as soon as it's available
+    mediaRecorder.ondataavailable = (event) => {
+      if (event.data && event.data.size > 0) {
+        socket.emit("video-chunk", { streamKey, chunk: event.data });
+        console.log("Chunk sent:", event.data);
+      }
+    };
+
+    // Start recording with a timeslice of 1000ms
+    mediaRecorder.start(1000);
+    setStreaming(true);
+  };
 
   const startStreaming = async () => {
     if (!streamKey) {
       alert("Please enter a stream key");
       return;
     }
-    try {
-      // Request access to video and audio devices.
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true,
-      });
-      streamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-      }
 
-      // Notify the stream server to start the stream.
-      socket.emit("start-stream", { streamKey });
+    // Emit the request to start the stream.
+    socket.emit("start-stream", { streamKey });
 
-      // Check for supported mimeType.
-      let mimeType = "video/webm; codecs=vp8";
-      if (!MediaRecorder.isTypeSupported(mimeType)) {
-        console.warn(`${mimeType} is not supported, falling back.`);
-        mimeType = "video/webm";
-        if (!MediaRecorder.isTypeSupported(mimeType)) {
-          console.warn(
-            `${mimeType} is also not supported, using default settings.`
-          );
-          mimeType = "";
+    // Listen once for confirmation that the stream is ready.
+    socket.once("stream-started", async ({ streamKey: key }) => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: true,
+        });
+        streamRef.current = stream;
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
         }
+        // Start MediaRecorder only after the server is ready.
+        startMediaRecording(stream, key);
+      } catch (err) {
+        console.error("Error accessing media devices.", err);
       }
-      const options = mimeType ? { mimeType } : undefined;
-      const mediaRecorder = new MediaRecorder(stream, options);
-      mediaRecorderRef.current = mediaRecorder;
-
-      // When a data chunk is available, send it to the stream server.
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data && event.data.size > 0) {
-          socket.emit("video-chunk", { streamKey, chunk: event.data });
-        }
-      };
-
-      // Start recording and send data every 1000ms.
-      mediaRecorder.start(1000);
-      setStreaming(true);
-    } catch (err) {
-      console.error("Error accessing media devices.", err);
-    }
+    });
   };
 
   const stopStreaming = () => {
-    // Stop recording and close the media stream.
     mediaRecorderRef.current?.stop();
     streamRef.current?.getTracks().forEach((track) => track.stop());
-
-    // Notify the stream server to stop the stream.
     socket.emit("stop-stream", { streamKey });
     setStreaming(false);
   };

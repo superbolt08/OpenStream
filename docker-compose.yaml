@@ -1,5 +1,5 @@
 services:
-  app_server:
+  app-server:
     build: 
       context: .
       dockerfile: Dockerfile
@@ -80,8 +80,8 @@ services:
         AntMediaServer: "ant-media-server.zip"
     container_name: antmedia
     ports:
-      - "${HLS_BROADCAST_PORT}:${HLS_BROADCAST_PORT}"   # HLS streaming
       - "${RTMP_SERVER_PORT}:${RTMP_SERVER_PORT}"   # RTMP ingest
+      - "${HLS_BROADCAST_PORT}:${HLS_BROADCAST_PORT}"   # HLS streaming
       - "${WEB_SERVER_PORT}:${WEB_SERVER_PORT}"   #webRTC
     volumes:
       - antmedia-webapps:/usr/local/antmedia/webapps

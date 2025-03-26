@@ -43,7 +43,18 @@ const startStream = async (streamKey) => {
       "-f flv",
     ])
     .output(rtmpUrl)
-    .on("start", () => console.log(`FFmpeg started streaming for ${streamKey}`))
+    .on("start", () => {
+      console.log(`FFmpeg started streaming for ${streamKey}`);
+      // Attach an error handler to FFmpeg's stdin once it's available.
+      if (command.ffmpegProc && command.ffmpegProc.stdin) {
+        command.ffmpegProc.stdin.on("error", (err) => {
+          console.error(`FFmpeg stdin error for ${streamKey}:`, err);
+          // Clean up to avoid further writes
+          command.kill("SIGINT");
+          ffmpegProcesses.delete(streamKey);
+        });
+      }
+    })
     .on("end", () => {
       console.log(`FFmpeg ended streaming for ${streamKey}`);
       ffmpegProcesses.delete(streamKey);
@@ -58,7 +69,7 @@ const startStream = async (streamKey) => {
   ffmpegProcesses.set(streamKey, command);
 };
 
-// REST endpoint to start a stream (useful for triggering from an API call)
+// REST endpoint to start a stream
 app.post("/start/:streamKey", async (req, res) => {
   const { streamKey } = req.params;
   await startStream(streamKey);
@@ -80,20 +91,33 @@ app.post("/stop/:streamKey", async (req, res) => {
 
 // Socket.IO to receive video chunks from the client
 io.on("connection", (socket) => {
-  console.log("A user connected");
+  console.log("A user connected:", socket.id);
 
-  // When a client requests to start a stream via socket, start ffmpeg if not already running
+  // When a client requests to start a stream
   socket.on("start-stream", async ({ streamKey }) => {
-    await startStream(streamKey);
-    socket.emit("stream-started", { streamKey });
+    if (!ffmpegProcesses.has(streamKey)) {
+      try {
+        await startStream(streamKey);
+        // Emit confirmation after starting the stream
+        socket.emit("stream-started", { streamKey });
+      } catch (err) {
+        console.error("Error starting stream", err);
+        socket.emit("stream-error", { streamKey, error: err.message });
+      }
+    } else {
+      socket.emit("stream-started", { streamKey });
+    }
   });
 
-  // Receive video chunks from the client
+  // Receive video chunks from the client and write to FFmpeg's stdin.
   socket.on("video-chunk", ({ streamKey, chunk }) => {
     const command = ffmpegProcesses.get(streamKey);
-    if (command && command.ffmpegProc && command.ffmpegProc.stdin) {
-      // Write the incoming binary chunk to ffmpeg's stdin.
-      command.ffmpegProc.stdin.write(chunk);
+    if (command && command.ffmpegProc && command.ffmpegProc.stdin.writable) {
+      command.ffmpegProc.stdin.write(chunk, (err) => {
+        if (err) {
+          console.error(`Error writing chunk for ${streamKey}:`, err);
+        }
+      });
     } else {
       console.error(`No active ffmpeg process for streamKey: ${streamKey}`);
     }
