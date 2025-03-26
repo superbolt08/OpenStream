@@ -2,101 +2,113 @@ import express from "express";
 import { Server } from "socket.io";
 import http from "http";
 import ffmpeg from "fluent-ffmpeg";
-import os from "os";
 
 ffmpeg.setFfmpegPath("ffmpeg");
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  },
+});
 
 // Environment variables with fallbacks
 const STREAM_PORT = process.env.STREAM_PORT || 4000;
-
 const RTMP_SERVER_HOST = process.env.RTMP_SERVER_HOST || "localhost";
 const RTMP_SERVER_PORT = process.env.RTMP_SERVER_PORT || 1935;
 const RTMP_APP = process.env.RTMP_APP || "LiveApp";
 
-// Function to get the correct webcam input based on OS
-const getWebcamInput = () => {
-  const platform = os.platform();
-  if (platform === "linux") {
-    return { input: "/dev/video0", options: ["-f", "v4l2"] };
-  } else if (platform === "darwin") {
-    return { input: "0:1", options: ["-f", "avfoundation"] };
-  } else if (platform === "win32") {
-    return { input: 'video="Your Webcam Name"', options: ["-f", "dshow"] };
-  } else {
-    throw new Error("Unsupported OS");
-  }
-};
-
 // Map to track ffmpeg processes keyed by streamKey
-const ffmpegCommands = new Map();
+const ffmpegProcesses = new Map();
 
-// Start a stream based solely on the streamKey
+// Start a stream based solely on the streamKey using a pipe input
 const startStream = async (streamKey) => {
   // Construct the RTMP URL using environment variables
   const rtmpUrl = `rtmp://${RTMP_SERVER_HOST}:${RTMP_SERVER_PORT}/${RTMP_APP}/${streamKey}`;
   console.log(`Starting stream: ${rtmpUrl}`);
 
-  const { input, options } = getWebcamInput();
-
+  // Create an ffmpeg process that reads from stdin (pipe:0).
+  // The input format ("webm") should match the format sent from the client.
   const command = ffmpeg()
-    .input(input)
-    .inputOptions([...options, "-framerate", "30"])
+    .input("pipe:0")
+    .inputFormat("webm")
     .outputOptions([
       "-c:v libx264",
       "-preset veryfast",
       "-b:v 2500k",
       "-c:a aac",
       "-b:a 128k",
-      "-f",
-      "flv",
+      "-f flv",
     ])
     .output(rtmpUrl)
-    .on("start", () => console.log(`Stream started: ${streamKey}`))
+    .on("start", () => console.log(`FFmpeg started streaming for ${streamKey}`))
     .on("end", () => {
-      console.log(`Stream ended: ${streamKey}`);
-      ffmpegCommands.delete(streamKey);
+      console.log(`FFmpeg ended streaming for ${streamKey}`);
+      ffmpegProcesses.delete(streamKey);
     })
     .on("error", (err) => {
-      console.error("Stream error:", err);
-      ffmpegCommands.delete(streamKey);
+      console.error(`FFmpeg error for ${streamKey}:`, err);
+      ffmpegProcesses.delete(streamKey);
     });
 
-  // Save the command in the Map using streamKey as the key
-  ffmpegCommands.set(streamKey, command);
+  // Start ffmpeg; the spawned process is available as command.ffmpegProc
   command.run();
+  ffmpegProcesses.set(streamKey, command);
 };
 
-// Endpoint to start a stream: accepts streamKey as a URL parameter
+// REST endpoint to start a stream (useful for triggering from an API call)
 app.post("/start/:streamKey", async (req, res) => {
   const { streamKey } = req.params;
   await startStream(streamKey);
   res.send(`Stream ${streamKey} started.`);
 });
 
-// Endpoint to stop a stream: accepts streamKey as a URL parameter
+// REST endpoint to stop a stream
 app.post("/stop/:streamKey", async (req, res) => {
   const { streamKey } = req.params;
-  const command = ffmpegCommands.get(streamKey);
+  const command = ffmpegProcesses.get(streamKey);
   if (command) {
     command.kill("SIGINT");
-    ffmpegCommands.delete(streamKey);
+    ffmpegProcesses.delete(streamKey);
     res.send(`Stream ${streamKey} stopped.`);
   } else {
     res.status(400).send("No active stream found with that ID.");
   }
 });
 
-// WebSocket communication to notify clients about stream events
+// Socket.IO to receive video chunks from the client
 io.on("connection", (socket) => {
   console.log("A user connected");
+
+  // When a client requests to start a stream via socket, start ffmpeg if not already running
   socket.on("start-stream", async ({ streamKey }) => {
     await startStream(streamKey);
     socket.emit("stream-started", { streamKey });
   });
+
+  // Receive video chunks from the client
+  socket.on("video-chunk", ({ streamKey, chunk }) => {
+    const command = ffmpegProcesses.get(streamKey);
+    if (command && command.ffmpegProc && command.ffmpegProc.stdin) {
+      // Write the incoming binary chunk to ffmpeg's stdin.
+      command.ffmpegProc.stdin.write(chunk);
+    } else {
+      console.error(`No active ffmpeg process for streamKey: ${streamKey}`);
+    }
+  });
+
+  // Stop stream event from client
+  socket.on("stop-stream", ({ streamKey }) => {
+    const command = ffmpegProcesses.get(streamKey);
+    if (command) {
+      command.kill("SIGINT");
+      ffmpegProcesses.delete(streamKey);
+      socket.emit("stream-stopped", { streamKey });
+    }
+  });
+
   socket.on("disconnect", () => {
     console.log("User disconnected");
   });

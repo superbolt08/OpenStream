@@ -2,6 +2,9 @@ import { verifySession } from "@/app/lib/dal";
 import { prisma } from "@/prisma/index";
 import { NextRequest, NextResponse } from "next/server";
 
+const STREAM_SERVER_HOST = process.env.STREAM_SERVER_HOST || "localhost";
+const STREAM_PORT = process.env.STREAM_PORT || "4000";
+
 export async function DELETE(req: NextRequest) {
   const session = await verifySession();
   if (!session) {
@@ -42,6 +45,20 @@ export async function DELETE(req: NextRequest) {
       );
     }
 
+    // Call the stream server to stop the stream
+    const streamServerUrl = `http://${STREAM_SERVER_HOST}:${STREAM_PORT}/stop/${streamKey}`;
+
+    const stopResponse = await fetch(streamServerUrl, {
+      method: "POST",
+    });
+    if (!stopResponse.ok) {
+      console.error("Failed to stop stream on stream server");
+      return NextResponse.json(
+        { error: "Failed to stop stream on stream server" },
+        { status: 500 }
+      );
+    }
+
     // Delete the stream record from the database.
     const deletedStream = await prisma.stream.delete({
       where: { id: streamKey },
@@ -53,6 +70,9 @@ export async function DELETE(req: NextRequest) {
     );
   } catch (error) {
     console.error("Error ending stream:", error);
-    return NextResponse.json({ error: "Error ending stream" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Error ending stream" },
+      { status: 400 }
+    );
   }
 }

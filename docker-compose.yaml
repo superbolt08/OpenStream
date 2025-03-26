@@ -111,7 +111,7 @@ services:
     restart: always
     volumes:
       - /stream_server/node_modules
-      - ./stream_server:/stream-server
+      - ./stream_server:/stream_server
 
 volumes:
   mongo-db-data:
