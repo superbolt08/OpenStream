@@ -2,7 +2,6 @@
 
 # dependencies
 /node_modules
-/websocket/node_modules
 /.pnp
 .pnp.*
 .yarn/*
@@ -46,4 +45,3 @@ next-env.d.ts
 mongo-keyfile
 compose.rep.yaml
 compose.ui.yaml
-/stream_server/ant-media-server.zip

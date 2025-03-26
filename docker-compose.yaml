@@ -15,7 +15,7 @@ services:
       "
     env_file: .env.development
     ports:
-      - "${SERVER_PORT}:${SERVER_PORT}"
+      - "3000:3000"
     volumes:
       - .:/server
       - /server/node_modules
@@ -30,7 +30,7 @@ services:
     container_name: mongo_express
     env_file: .env.development
     ports:
-      - "${MONGO_EXPRESS_PORT}:${MONGO_EXPRESS_PORT}"
+      - "8080:8080"
     depends_on:
       db:
         condition: service_healthy
@@ -43,7 +43,7 @@ services:
     environment:
       NODE_ENV: ${NODE_ENV}
     ports:
-      - "${SOCKET_PORT}:${SOCKET_PORT}"
+      - "3005:3005"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:${SOCKET_PORT}/health"]
       interval: 30s
@@ -59,51 +59,18 @@ services:
     command: ["--replSet", "rs0", "--bind_ip_all"]
     env_file: .env.development
     ports:
-      - "${DB_PORT}:${DB_PORT}"
+      - "27017:27017"
     restart: always
     healthcheck:
       test: echo "try { rs.status() } catch (err) { rs.initiate() }" | mongosh --port ${DB_PORT} --quiet
       interval: 5s
       timeout: 30s
       start_period: 0s
-      start_interval: 1s
       retries: 30
     volumes:
       - db-data:/data/db
       - db-config:/data/configdb
 
-  antmedia:
-    build: 
-      context: ./stream_server
-      dockerfile: Dockerfile
-      args:
-        AntMediaServer: "ant-media-server.zip"
-    container_name: antmedia
-    ports:
-      - "5080:5080"   # HLS streaming
-      - "1935:1935"   # RTMP ingest
-      - "443:443"     # HTTPS access (optional)
-    volumes:
-      - antmedia-webapps:/usr/local/antmedia/webapps
-      - antmedia-conf:/usr/local/antmedia/conf
-      - antmedia-logs:/usr/local/antmedia/log
-      - antmedia-plugins:/usr/local/antmedia/plugins         # For custom plugins
-      - antmedia-data:/usr/local/antmedia/data               # For recording & stream data
-      - antmedia-streams:/usr/local/antmedia/streams         # For HLS/DASH streams
-    healthcheck:
-      test: curl --fail http://localhost:5080 || exit 1
-      interval: 30s
-      timeout: 10s
-      retries: 5
-    restart: unless-stopped
-    entrypoint: /usr/local/antmedia/start.sh
-
 volumes:
   db-data:
   db-config:
-  antmedia-webapps:
-  antmedia-conf:
-  antmedia-logs:
-  antmedia-plugins:
-  antmedia-data:
-  antmedia-streams:

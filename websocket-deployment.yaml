@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yaml
+    kompose.version: 1.28.0 (c4137012e)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: openstream-websocket
+  name: openstream-websocket
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: openstream-websocket
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yaml
+        kompose.version: 1.28.0 (c4137012e)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/openstream-default: "true"
+        io.kompose.service: openstream-websocket
+    spec:
+      containers:
+        - env:
+            - name: NODE_ENV
+              value: development
+            - name: DATABASE_URL
+              value: "mongodb://db:27017/dev?replicaSet=rs0"
+          image: joey415/openstream-websocket
+          livenessProbe:
+            exec:
+              command:
+                - curl
+                - -f
+                - http://localhost:${SOCKET_PORT}/health
+            failureThreshold: 5
+            periodSeconds: 30
+            timeoutSeconds: 10
+          name: openstream-websocket
+          ports:
+            - containerPort: 3005
+          resources: {}
+          volumeMounts:
+            - mountPath: /websocket/node_modules
+              name: websocket-claim0
+            - mountPath: /websocket
+              name: websocket-claim1
+      restartPolicy: Always
+      volumes:
+        - name: websocket-claim0
+          persistentVolumeClaim:
+            claimName: websocket-claim0
+        - name: websocket-claim1
+          persistentVolumeClaim:
+            claimName: websocket-claim1
+status: {}
