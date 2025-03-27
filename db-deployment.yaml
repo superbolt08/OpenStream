@@ -25,6 +25,22 @@ spec:
         io.kompose.network/openstream-default: "true"
         io.kompose.service: db
     spec:
+      imagePullSecrets:
+        - name: regcred # Reference to the Docker registry secret
+      initContainers:
+        - name: mongo-init-replica
+          image: mongo:latest
+          command:
+            - sh
+            - -c
+            - |
+              # this is commented out for now
+              # echo "Waiting for MongoDB to be reachable at db:27017..."
+              # until mongosh --host db:27017 --eval "try { rs.status() } catch (e) { rs.initiate() }" || \
+              #       mongosh --host db:27017 --eval "rs.status().ok"; do
+              #   echo "Mongo not ready, retrying..."
+              #   sleep 2
+              # done
       containers:
         - args:
             - --replSet
@@ -106,7 +122,8 @@ spec:
                 configMapKeyRef:
                   key: SOCKET_PORT
                   name: env-development
-          image: mongo
+          image: mongo:latest # Ensure this image exists in your registry
+          imagePullPolicy: IfNotPresent
           livenessProbe:
             exec:
               command:

@@ -29,7 +29,10 @@ spec:
         - args:
             - sh
             - -c
-            - "\n  npm run prisma:generate && \n  npm run db:push &&\n  npm run dev\n"
+                until nc -z db 27017; do echo "Waiting for MongoDB..."; sleep 2; done &&
+                npm run prisma:generate &&
+                npm run db:push &&
+                npm run dev
           env:
             - name: DATABASE_URL
               valueFrom:
