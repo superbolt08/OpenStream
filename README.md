@@ -4,9 +4,13 @@ There is error with running server, mongo, web socket due to some sort of Image 
 
 ----------------------------
 
-Install wsl and k3s:
+Install wsl in windows terminal (cmd):
 
 wsl --install
+
+----------------------------
+
+Install k3s on wsl Ubuntu (launch cmd and go to top right v sign to select Ubuntu):
 
 curl -sfL https://get.k3s.io | sh -
 
