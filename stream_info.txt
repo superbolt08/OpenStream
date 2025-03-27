@@ -1,0 +1,14 @@
+
+example streamKey: stream69661
+
+webRTCApp publishing 
+ws://localhost:5080/WebRTCApp/websocket
+
+webRTCApp viewing
+http://localhost:5443/WebRTCApp/play.html?id=<stream_key>
+
+example streamKey: stream69661
+
+HLS
+http://localhost:5080/WebRTCApp/streams/<streamKey>.m3u8
+http://localhost:5080/WebRTCApp/streams/stream69661.m3u8

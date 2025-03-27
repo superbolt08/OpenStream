@@ -1,77 +1,61 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { useSocket } from "@/app/components/socketprovider/SocketProvider";
+import { useState, useRef, useEffect } from "react";
+import { WebRTCAdaptor } from "@antmedia/webrtc_adaptor";
+import { uuidv4 } from "@/app/services/uuidc4";
 
 const StreamPage = () => {
-  const socket = useSocket();
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [streamKey, setStreamKey] = useState("");
   const [streaming, setStreaming] = useState(false);
-  const videoRef = useRef(null);
-  const mediaRecorderRef = useRef(null);
-  const streamRef = useRef(null);
+  const [status, setStatus] = useState("Offline");
+  const [webRTCAdaptor, setWebRTCAdaptor] = useState<WebRTCAdaptor | null>(null);
+  const streamIdRef = useRef<string>("");
 
-  const startMediaRecording = (stream, streamKey) => {
-    // Determine supported mimeType
-    let mimeType = "video/webm; codecs=vp8,opus";
-    if (!MediaRecorder.isTypeSupported(mimeType)) {
-      console.warn(`${mimeType} not supported, falling back.`);
-      mimeType = "video/webm";
-      if (!MediaRecorder.isTypeSupported(mimeType)) {
-        console.warn(`${mimeType} is also not supported, using default settings.`);
-        mimeType = "";
-      }
+  // Initialize the WebRTCAdaptor once the component and video element are mounted.
+  useEffect(() => {
+    if (videoRef.current && !webRTCAdaptor) {
+      const adaptor = new WebRTCAdaptor({
+        websocket_url: "ws://localhost:5080/WebRTCApp/websocket",
+        localVideoElement: videoRef.current,
+        // Make sure audio is enabled
+        mediaConstraints: { video: true, audio: true },
+        callback: (info: string, obj: any) => {
+          console.log("Callback info: ", info);
+          if (info === "publish_started") {
+            console.log("Publish started");
+            setStatus("Broadcasting - Stream Id: " + streamIdRef.current);
+            setStreaming(true);
+          } else if (info === "publish_finished") {
+            console.log("Publish finished");
+            setStatus("Offline");
+            setStreaming(false);
+          } else if (info === "initialized") {
+            console.log("WebRTCAdaptor initialized");
+          }
+        },
+        callbackError: (error: any, message: string) => {
+          console.error("Error callback: ", error, message);
+        },
+      });
+      setWebRTCAdaptor(adaptor);
     }
-    const options = mimeType ? { mimeType } : undefined;
-    const mediaRecorder = new MediaRecorder(stream, options);
-    mediaRecorderRef.current = mediaRecorder;
+  }, [videoRef, webRTCAdaptor]);
 
-    // Send each chunk to the server as soon as it's available
-    mediaRecorder.ondataavailable = (event) => {
-      if (event.data && event.data.size > 0) {
-        socket.emit("video-chunk", { streamKey, chunk: event.data });
-        console.log("Chunk sent:", event.data);
-      }
-    };
-
-    // Start recording with a timeslice of 1000ms
-    mediaRecorder.start(1000);
-    setStreaming(true);
-  };
-
-  const startStreaming = async () => {
-    if (!streamKey) {
-      alert("Please enter a stream key");
+  const handleStartPublishing = () => {
+    if (!webRTCAdaptor) {
+      console.error("WebRTCAdaptor is not initialized yet.");
       return;
     }
-
-    // Emit the request to start the stream.
-    socket.emit("start-stream", { streamKey });
-
-    // Listen once for confirmation that the stream is ready.
-    socket.once("stream-started", async ({ streamKey: key }) => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-          audio: true,
-        });
-        streamRef.current = stream;
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
-        // Start MediaRecorder only after the server is ready.
-        startMediaRecording(stream, key);
-      } catch (err) {
-        console.error("Error accessing media devices.", err);
-      }
-    });
+    // Use the provided streamKey or generate a random stream id using uuidv4
+    const id = streamKey || uuidv4();
+    streamIdRef.current = id;
+    webRTCAdaptor.publish(id);
   };
 
-  const stopStreaming = () => {
-    mediaRecorderRef.current?.stop();
-    streamRef.current?.getTracks().forEach((track) => track.stop());
-    socket.emit("stop-stream", { streamKey });
-    setStreaming(false);
+  const handleStopPublishing = () => {
+    if (!webRTCAdaptor) return;
+    webRTCAdaptor.stop(streamIdRef.current);
   };
 
   return (
@@ -80,18 +64,18 @@ const StreamPage = () => {
       <div>
         <input
           type="text"
-          placeholder="Enter stream key"
+          placeholder="Enter stream key (optional)"
           value={streamKey}
           onChange={(e) => setStreamKey(e.target.value)}
           style={{ marginRight: "1rem", padding: "0.5rem" }}
         />
         {!streaming ? (
-          <button onClick={startStreaming} style={{ padding: "0.5rem 1rem" }}>
-            Start Streaming
+          <button onClick={handleStartPublishing} style={{ padding: "0.5rem 1rem" }}>
+            Start Publishing
           </button>
         ) : (
-          <button onClick={stopStreaming} style={{ padding: "0.5rem 1rem" }}>
-            Stop Streaming
+          <button onClick={handleStopPublishing} style={{ padding: "0.5rem 1rem" }}>
+            Stop Publishing
           </button>
         )}
       </div>
@@ -99,11 +83,13 @@ const StreamPage = () => {
         <video
           ref={videoRef}
           autoPlay
+          controls
           muted
           playsInline
-          style={{ width: "400px", height: "300px", background: "#000" }}
+          style={{ width: "480px", height: "360px", background: "#000" }}
         />
       </div>
+      <p>{status}</p>
     </div>
   );
 };

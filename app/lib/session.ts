@@ -82,7 +82,7 @@ export async function updateSession(user: string) {
 export async function deleteSession() {
   const cookieStore = await cookies();
   const token = cookieStore.get("session")?.value;
-  
+
   if (token) {
     const payload = await decrypt(token);
     if (payload && payload.id) {
@@ -91,7 +91,6 @@ export async function deleteSession() {
       });
     }
   }
-  
+
   cookieStore.delete("session");
 }
-

@@ -3,7 +3,7 @@
 # dependencies
 /node_modules
 /websocket/node_modules
-/stream_server/node_modules
+/stream_server/ant-media-server.zip
 /.pnp
 .pnp.*
 .yarn/*
@@ -47,4 +47,4 @@ next-env.d.ts
 mongo-keyfile
 compose.rep.yaml
 compose.ui.yaml
-/antmedia/ant-media-server.zip
+
