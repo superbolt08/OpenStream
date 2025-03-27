@@ -10,6 +10,10 @@ wsl --install
 
 ----------------------------
 
+Make sure Docker Desktop is open for next steps
+
+----------------------------
+
 Install k3s on wsl Ubuntu (launch cmd and go to top right v sign to select Ubuntu):
 
 curl -sfL https://get.k3s.io | sh -
