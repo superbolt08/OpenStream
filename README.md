@@ -41,9 +41,11 @@ cd [naviagate as needed]
 ----------------------------
 
 To Run:
+
 kubectl apply -f .
 
 Check pod status:
+
 kubectl get pods -o wide
 
 Restart:
