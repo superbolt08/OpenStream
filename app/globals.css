@@ -18,7 +18,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Apply dynamic theming and the Inter font exclusively */
+/* Base styling for body */
 body {
   color: var(--foreground);
   background-color: var(--background);
@@ -26,11 +26,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  padding-top: 70px; /* Add top padding to account for the fixed navbar height */
+  /* Remove flex centering to allow content to flow naturally */
+  min-height: 100vh;
 }
 
 /* Reset box model and margins */

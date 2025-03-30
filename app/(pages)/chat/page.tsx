@@ -1,6 +1,6 @@
 "use client";
 
-import { useSocket } from "@/app/components/socketprovider/SocketProvider";
+import { useSocket } from "@/app/components/Socketprovider/SocketProvider";
 import { useState, useEffect, useRef } from "react";
 import styles from "./page.module.css";
 
@@ -15,7 +15,6 @@ export default function Chat() {
   const socket = useSocket();
   const chatDisplayRef = useRef<HTMLDivElement>(null);
 
-  // Predefined high-contrast colors for a black background
   const highContrastColors = [
     "#00FF00", // Lime
     "#FF00FF", // Magenta
@@ -28,7 +27,7 @@ export default function Chat() {
   ];
 
   function getRandomColor(): string {
-    return highContrastColors[Math.floor(Math.random() * highContrastColors.length)];
+    return "#7CFC00";
   }
 
   useEffect(() => {

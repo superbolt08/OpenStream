@@ -7,9 +7,7 @@ import { prisma } from "@/prisma/index";
 export const verifySession = cache(async () => {
   const cookie = (await cookies()).get("session")?.value;
   const session = await decrypt(cookie);
-
   if (!session) {
-    // Either redirect or return a falsy session object.
     return null;
   }
 
@@ -28,11 +26,18 @@ export const getUser = cache(async () => {
       },
       select: {
         user: true,
-        stream: true,
+        stream: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
 
-    return user;
+    return {
+      username: user?.user,
+      stream: user?.stream ? user.stream.id : undefined,
+    };
   } catch (error) {
     console.log("Failed to fetch user", error);
     return null;

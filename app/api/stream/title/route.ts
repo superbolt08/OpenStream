@@ -13,8 +13,17 @@ export async function PATCH(req: NextRequest) {
 
   try {
     const sessionId = session.sessionId;
-    // Here we assume no title is provided.
-    // Instead, we simply confirm that the stream record exists for this session.
+    const body = await req.json();
+    const { title } = body;
+
+    if (!title) {
+      return NextResponse.json(
+        { message: "Title is required" },
+        { status: 400 }
+      );
+    }
+
+    // Find the session record, including its stream and streamKey.
     const sessionRecord = await prisma.session.findUnique({
       where: { id: sessionId },
       select: { stream: true, streamKey: true },
@@ -27,26 +36,29 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
+    if (!sessionRecord?.streamKey) {
+      return NextResponse.json(
+        { error: "No streamKey exists for this session." },
+        { status: 400 }
+      );
+    }
+
+    // Update the stream record: update title, mark active as true, update createdAt.
     await prisma.stream.update({
       where: { sessionId: sessionId },
       data: {
-        active: true,
-        createdAt: new Date(),
+        title
       },
     });
 
-
-
-    // Here, you might update additional fields if needed,
-    // but for now we simply return the streamKey.
     return NextResponse.json(
-      { message: "Stream started successfully", streamKey: sessionRecord.streamKey },
+      { message: "Stream title updated successfully"},
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error starting stream:", error);
+    console.error("Error updating stream title:", error);
     return NextResponse.json(
-      { error: "Error starting stream" },
+      { error: "Error updating stream title" },
       { status: 400 }
     );
   }

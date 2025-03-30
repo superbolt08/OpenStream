@@ -3,6 +3,10 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { prisma } from "@/prisma/index";
 import type { SessionPayload } from "@/app/lib/defintions";
+import { uuidv4 } from "@/app/services/uuidv4";
+
+const HOST = process.env.STREAM_SERVER_HOST || "localhost";
+const PORT = process.env.STREAM_SERVER_PORT || "5080";
 
 const secretKey = process.env.SESSION_SECRET;
 if (!secretKey) {
@@ -23,7 +27,7 @@ export async function decrypt(session: string | undefined = "") {
     const { payload } = await jwtVerify(session, encodedKey, {
       algorithms: ["HS256"],
     });
-    return payload;
+    return payload as SessionPayload;
   } catch (error) {
     console.log("Failed to verify session", error);
     return null;
@@ -32,16 +36,37 @@ export async function decrypt(session: string | undefined = "") {
 
 export async function createSession(user: string) {
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+
+  const streamKey = uuidv4();
   const session = await prisma.session.create({
     data: {
       user,
       expiresAt,
+      streamKey,
     },
   });
 
   const id = session.id;
-  const token = await encrypt({ id, expiresAt });
+  const playbackURL = `http://${HOST}:${PORT}/WebRTCApp/streams/${streamKey}.m3u8`;
 
+  const stream = await prisma.stream.create({
+    data: {
+      playbackURL,
+      session: {
+        connect: { id: id },
+      },
+    },
+  });
+
+  await prisma.chat.create({
+    data: {
+      stream: {
+        connect: { id: stream.id },
+      },
+    },
+  });
+
+  const token = await encrypt({ id, expiresAt });
   const cookieStore = await cookies();
   cookieStore.set("session", token, {
     httpOnly: true,

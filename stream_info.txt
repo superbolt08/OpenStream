@@ -11,4 +11,4 @@ example streamKey: stream69661
 
 HLS
 http://localhost:5080/WebRTCApp/streams/<streamKey>.m3u8
-http://localhost:5080/WebRTCApp/streams/stream69661.m3u8
+http://localhost:5080/WebRTCApp/streams/1424ac5c-e236-4573-9ffa-53b5c67299b1.m3u8

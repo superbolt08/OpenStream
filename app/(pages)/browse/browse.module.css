@@ -1,0 +1,58 @@
+/* Main container with a dark background */
+.container {
+    background-color: black;
+    color: ghostwhite;
+    min-height: 100vh;
+    padding: 2rem;
+  }
+  
+  /* Title styling: using azure for accent */
+  .title {
+    text-align: left;
+    color: azure;
+    margin-bottom: 2rem;
+  }
+  
+  /* Grid layout for stream cards */
+  .streamsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  
+  /* Each stream card */
+  .streamCard {
+    background-color: #222;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  }
+  
+  /* Video element styling */
+  .video {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    background: #000;
+  }
+  
+  /* Info container for title and streamer */
+  .info {
+    margin-top: 1rem;
+  }
+  
+  /* Stream title with azure accent */
+  .streamTitle {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0;
+    color: azure;
+  }
+  
+  /* Streamer name styling */
+  .streamer {
+    font-size: 0.9rem;
+    margin: 0.5rem 0 0;
+    color: ghostwhite;
+  }
+  

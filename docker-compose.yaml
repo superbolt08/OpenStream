@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
       args: 
         NODE_ENV: ${NODE_ENV}
-    container_name: app_server
+    container_name: app-server
     restart: always
     command: >
       sh -c "
@@ -17,8 +17,8 @@ services:
     ports:
       - "${MAIN_SERVER_PORT}:${MAIN_SERVER_PORT}"
     volumes:
-      - .:/app_server
-      - /app_server/node_modules
+      - .:/app-server
+      - /app-server/node_modules
     depends_on:
       mongo-db:
         condition: service_healthy
@@ -27,7 +27,7 @@ services:
 
   mongo-express:
     image: mongo-express
-    container_name: mongo_express
+    container_name: mongo-express
     env_file: .env.development
     ports:
       - "${MONGO_EXPRESS_PORT}:${MONGO_EXPRESS_PORT}"
@@ -55,7 +55,7 @@ services:
 
   mongo-db:
     image: mongo
-    container_name: mongo_db
+    container_name: mongo-db
     command: ["--replSet", "rs0", "--bind_ip_all"]
     env_file: .env.development
     ports:
@@ -74,18 +74,18 @@ services:
 
   stream-server:
     build: 
-      context: ./stream_server
+      context: ./stream-server
       dockerfile: Dockerfile
       args:
         AntMediaServer: "ant-media-server.zip"
-    container_name: stream_server
+    container_name: stream-server
     ports:
-      - "${STREAM_SERVER_PORT}:${STREAM_SERVER_PORT}"   #webRTC ingestion + HLS broadcast
+      - "${STREAM_SERVER_PORT}:${STREAM_SERVER_PORT}"   # WebRTC ingestion + HLS broadcast
     volumes:
       - antmedia-webapps:/usr/local/antmedia/webapps
-      - antmedia-conf:/usr/local/antmedia/conf
-      - antmedia-logs:/usr/local/antmedia/log
-      - antmedia-plugins:/usr/local/antmedia/plugins         # For custom plugins
+      # - antmedia-conf:/usr/local/antmedia/conf
+      # - antmedia-logs:/usr/local/antmedia/log
+      # - antmedia-plugins:/usr/local/antmedia/plugins         # For custom plugins
       - antmedia-data:/usr/local/antmedia/data               # For recording & stream data
       - antmedia-streams:/usr/local/antmedia/streams         # For HLS/DASH streams
     healthcheck:
@@ -100,8 +100,8 @@ volumes:
   mongo-db-data:
   mongo-db-config:
   antmedia-webapps:
-  antmedia-conf:
-  antmedia-logs:
-  antmedia-plugins:
+  # antmedia-conf:
+  # antmedia-logs:
+  # antmedia-plugins:
   antmedia-data:
   antmedia-streams:

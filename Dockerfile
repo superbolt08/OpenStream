@@ -1,6 +1,6 @@
 FROM node:18-alpine
 
-WORKDIR /app_server
+WORKDIR /app-server
 
 ENV NEXT_TELEMETRY_DISABLED 1 
 ARG NODE_ENV

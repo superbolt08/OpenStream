@@ -1,8 +1,8 @@
 export interface Stream {
-  id: string,
-  streamKey: string;
+  id: string;
+  streamer: string;
   title: string;
-  playbackUrl: string;
+  playbackURL: string;
   createdAt: string;
   chatId: string;
 }
