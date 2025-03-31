@@ -29,3 +29,34 @@ jobs:
           context: .
           push: true
           tags: superbolt08/openstream:latest
+
+      - name: Deploy to Pi via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.PI_HOST }}
+          username: ${{ secrets.PI_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            mkdir -p ~/deployments
+            cat > ~/deployments/webapp-deployment.yaml << 'EOF'
+            apiVersion: apps/v1
+            kind: Deployment
+            metadata:
+              name: webapp
+            spec:
+              replicas: 1
+              selector:
+                matchLabels:
+                  app: webapp
+              template:
+                metadata:
+                  labels:
+                    app: webapp
+                spec:
+                  containers:
+                  - name: webapp
+                    image: superbolt08/openstream:latest
+                    ports:
+                    - containerPort: 80
+            EOF
+            kubectl apply -f ~/deployments/webapp-deployment.yaml
