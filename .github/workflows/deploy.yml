@@ -1,4 +1,4 @@
-name: Deploy to Pi Cluster
+name: Deploy to Pi Cluster (No Secrets)
 
 on:
   push:
@@ -10,20 +10,21 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
+    env:
+      DOCKERHUB_USERNAME: ${{ github.event.inputs.username || '' }}
+      DOCKERHUB_TOKEN: ${{ github.event.inputs.token || '' }}
+
     steps:
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
       - name: Log in to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
 
-      - name: Build and Push Docker Image
+      - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
