@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 Containers running on Kubernetes (error)
 
 There is error with running server, mongo, web socket due to some sort of Image Pull error
@@ -68,6 +67,3 @@ kubectl get svc
 kubectl logs
 
 kubectl exec -it <pod-name> -- /bin/sh
-=======
-# OpenStream
->>>>>>> d28e4db2a7e1c41f7bef99bd56c5efa575413edf
