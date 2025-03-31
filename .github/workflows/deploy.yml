@@ -3,6 +3,7 @@ name: Deploy to Pi Cluster
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -26,4 +27,4 @@ jobs:
       with:
         context: .
         push: true
-        tags: superbolt08/OpenStream
+        tags: superbolt08/openstream:latest
