@@ -1,0 +1,57 @@
+#version: "3.9"
+
+services:
+
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    restart: always
+    networks:
+      - cv-network
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  fetcher:
+    build:
+      context: ./hls-fetcher
+    container_name: fetcher
+    depends_on:
+      - mongo
+      - inference
+    networks:
+      - cv-network
+    environment:
+      - STREAM_PROVIDER=http://your-hls-source-or-api
+      - INFERENCE_ADDR=tcp://inference:6000
+      - MONGO_URL=mongodb://mongo:27017/
+    ports:
+      - "8000:8000"
+
+  inference:
+    build:
+      context: ./inference-node
+    container_name: inference
+    depends_on:
+      - mongo
+    networks:
+      - cv-network
+
+  visualizer:
+    build:
+      context: ./output-handler  # ← match your folder name
+    container_name: visualizer
+    depends_on:
+      - mongo
+    networks:
+      - cv-network
+    ports:
+      - "8080:8080"
+
+volumes:
+  mongo_data:
+
+networks:
+  cv-network:
+    driver: bridge
