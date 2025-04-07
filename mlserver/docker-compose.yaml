@@ -3,7 +3,7 @@
 services:
 
   mongo:
-    image: mongo:6
+    image: mongo:4.4
     container_name: mongo
     restart: always
     networks:
@@ -12,6 +12,7 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+
 
   fetcher:
     build:

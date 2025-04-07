@@ -8,6 +8,10 @@ app = FastAPI()
 client = MongoClient("mongodb://mongo:27017/")
 fs = gridfs.GridFS(client["processed"])
 
+@app.get("/test")
+def test():
+    return {"status": "Server is running"}
+
 @app.get("/segments")
 def list_segments():
     return {"segments": [f.filename for f in fs.find()]}
