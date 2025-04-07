@@ -2,6 +2,9 @@
 
 A cloud-based real-time video streaming and distributed computing platform built on a scalable Raspberry Pi cluster. This project is developed for CMPE 246 at UBC Okanagan and integrates edge computing, machine learning, and web development technologies.
 
+
+<img src="images/PiStack1.jpeg" alt="Pi Stack" width="50%" />
+
 ## 📦 Project Structure
 ![System UML](images/System%20UML.png)
 
