@@ -69,6 +69,46 @@ python3 run_stream.py
 cd ml/streaming/
 python3 run_stream.py
 ```
+
+
+## 📊 Architecture
+
+- **Cluster**: Raspberry Pi 4 nodes connected via a switch, using K3s  
+- **Streaming**: RTSP or WebRTC feeds processed in parallel  
+- **Web App**: User-friendly interface with dynamic video and event overlays  
+- **ML Tasks**: TensorFlow models for object recognition, adaptable with Strategy pattern  
+
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend**: Next.js, React, TypeScript  
+- **Backend**: Node.js, Express  
+- **ML**: TensorFlow, Python  
+- **Database**: Prisma, MongoDB  
+- **Containerization**: Docker, Kubernetes (K3s)  
+
+---
+
+## 📚 References
+
+- [Kubernetes Docs](https://kubernetes.io/)  
+- [TensorFlow](https://www.tensorflow.org/)  
+- [Raspberry Pi Clustering Tutorial](https://www.raspberrypi.com/tutorials/cluster-raspberry-pi-tutorial/)  
+- [Docker Swarm Setup](https://docs.docker.com/engine/swarm/)  
+
+---
+
+## 📄 License
+
+This project is developed as part of a university course and is not licensed for commercial distribution.
+
+---
+
+📷 Powered by Raspberry Pi  
+⚡ Fueled by curiosity and collaboration
+
 ----------------------------
 
 *Miscellaneous*
