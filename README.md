@@ -48,28 +48,30 @@ Open CMD and run:
 wsl --install
 ```
 
-1. **Cluster Configuration**
+2. **Cluster Configuration**
 ```bash
 cd cluster/scripts/
 ./setup-k3s-master.sh
 ./setup-k3s-worker.sh
 ```
-2. **Deploy ML and Video Modules**
+3. **Deploy ML and Video Modules**
 ```
 cd ml/streaming/
 python3 run_stream.py
 ```
-3. **Run Web App Locally**
+4. **Run Web App Locally**
 ```
 cd ml/streaming/
 python3 run_stream.py
 ```
-4. **Deploy via Kubernetes**
+5. **Deploy via Kubernetes**
 ```
 cd ml/streaming/
 python3 run_stream.py
 ```
 ----------------------------
+
+*Miscellaneous*
 
 Install wsl in windows terminal (cmd):
 
