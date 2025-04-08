@@ -71,7 +71,7 @@ def worker_loop():
             out.release()
             os.remove(tmp_path)
 
-            # ✅ Now store to MongoDB
+            # Now store to MongoDB
             with open(out_path, 'rb') as f:
                 fs.put(f, filename=os.path.basename(out_path))
 
