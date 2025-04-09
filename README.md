@@ -101,13 +101,18 @@ python3 run_stream.py
 - [Raspberry Pi Clustering Tutorial](https://www.raspberrypi.com/tutorials/cluster-raspberry-pi-tutorial/)  
 - [Docker Swarm Setup](https://docs.docker.com/engine/swarm/)  
 
+- 🌐 [Public Website Repository](https://github.com/superbolt08/OpenStream)
+- 🌐 UBC Internal Repos *(Access Restricted)*:
+  - [Main Project Repo](https://github.ubc.ca/CMPE-O-246-001-O2024W2/PiEdgeML)
+  - [Website Repo](https://github.ubc.ca/CMPE-O-246-001-O2024W2/OpenStream)
+- 📽️ [Demo Video](http://www.youtube.com/watch?v=guBMEs41JM0)
 
 ---
 ## ✅ Submission Checklist
 
 - [x] Midterm proposal PDF
 - [x] Final presentation PDF
-- [x] UML diagrams (architecture, use case, class)
+- [x] UML diagrams (included in final presentation)
 - [x] Source code (web & ML)
 - [x] Demo video
 - [x] README documentation
