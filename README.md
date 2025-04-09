@@ -108,6 +108,57 @@ python3 run_stream.py
 - 📽️ [Demo Video](http://www.youtube.com/watch?v=guBMEs41JM0)
 
 ---
+## 🗂️ Directory Structure
+
+### `.github/`
+- GitHub-specific configurations and GitHub Actions workflows.
+
+### `antmedia/logs/`
+- Logs related to the Ant Media Server for managing video streams.
+
+### `app/`
+- Core application logic (likely frontend/backend code).
+
+### `images/`
+- Static image assets used in the project or web UI.
+
+### `k8s/`
+- Kubernetes deployment files:
+  - `deployment.yaml`, `service.yaml`, `pv.yaml`, etc. for deploying containers, managing volumes, and services.
+
+### `prisma/`
+- ORM configuration and Prisma schema for interacting with the MongoDB database.
+
+### `public/`
+- Static files for frontend serving (e.g., HTML, JavaScript, CSS).
+
+### `stream_server/`
+- Code/config for the video streaming server component.
+
+### `websocket/`
+- WebSocket logic for enabling real-time chat and stream communication.
+
+---
+
+## ⚙️ Configuration Files
+
+### `.example.env.development` & `.example.env.test`
+- Example environment variable files for development and testing.
+
+### `Dockerfile`
+- Docker configuration for building the project container image.
+
+### `docker-compose.yaml`
+- Defines services, volumes, and networks to run the full application stack locally using Docker Compose.
+
+---
+
+## 📄 Documentation
+
+### `README.md`
+- Main documentation for the repository, including setup instructions and project description.
+
+---
 ## ✅ Submission Checklist
 
 - [x] Midterm proposal PDF
