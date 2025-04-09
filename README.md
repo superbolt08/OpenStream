@@ -101,6 +101,16 @@ python3 run_stream.py
 - [Raspberry Pi Clustering Tutorial](https://www.raspberrypi.com/tutorials/cluster-raspberry-pi-tutorial/)  
 - [Docker Swarm Setup](https://docs.docker.com/engine/swarm/)  
 
+
+---
+## ✅ Submission Checklist
+
+- [x] Midterm proposal PDF
+- [x] Final presentation PDF
+- [x] UML diagrams (architecture, use case, class)
+- [x] Source code (web & ML)
+- [x] Demo video
+- [x] README documentation
 ---
 
 ## 📄 License
