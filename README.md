@@ -120,7 +120,7 @@ python3 run_stream.py
 - Core application logic (likely frontend/backend code).
 
 ### `images/`
-- Static image assets used in the project or web UI.
+- UML Diagrams + Pictures + Architecture Diagram
 
 ### `k8s/`
 - Kubernetes deployment files:
