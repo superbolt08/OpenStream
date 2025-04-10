@@ -1,0 +1,73 @@
+/* Main container with dark background */
+.container {
+  background-color: black;
+  color: ghostwhite;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+/* Title styling: using azure for accent */
+.title {
+  text-align: left;
+  color: azure;
+  margin-bottom: 2rem;
+}
+
+/* Container wrapping the grid, with fixed height and vertical scroll */
+.streamsGridContainer {
+  height: 70vh; /* Fixed height for grid area */
+  overflow-y: auto;
+  padding-right: 1rem; /* Space for scrollbar */
+}
+
+/* Grid layout for stream cards with fixed card size */
+.streamsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 300px);
+  gap: 1.5rem;
+  justify-content: center; /* Center grid if container is wider */
+}
+
+/* Each stream card */
+.streamCard {
+  background-color: #222;
+  padding: 0.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.streamCard:hover {
+  transform: scale(1.03);
+}
+
+/* Video element with fixed 16:9 aspect ratio */
+.video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: #000;
+  pointer-events: none; /* Non-interactive thumbnail */
+}
+
+/* Info container for title and streamer */
+.info {
+  padding: 0.5rem;
+}
+
+/* Stream title styling */
+.streamTitle {
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin: 0;
+  color: azure;
+}
+
+/* Streamer name styling */
+.streamer {
+  font-size: 0.8rem;
+  margin: 0.25rem 0 0;
+  color: ghostwhite;
+}
