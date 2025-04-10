@@ -66,7 +66,6 @@ export async function createSession(user: string) {
     },
   });
 
-  console.log("flkmsmvsodvom")
   const token = await encrypt({ id, expiresAt });
   const cookieStore = await cookies();
   cookieStore.set("session", token, {

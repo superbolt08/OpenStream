@@ -62,7 +62,7 @@ export const StreamProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       const { WebRTCAdaptor } = await import("@antmedia/webrtc_adaptor");
       const adaptor = new WebRTCAdaptor({
-        websocket_url: process.env.STREAM_URL,
+        websocket_url: "ws://localhost:5080/WebRTCApp/websocket",
         localVideoElement: videoRef.current,
         mediaConstraints: { video: true, audio: true },
         // You can include offerOptions if needed:

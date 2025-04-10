@@ -17,6 +17,7 @@
   "dependencies": {
     "@antmedia/webrtc_adaptor": "^2.13.2",
     "@prisma/client": "^6.5.0",
+    "cookies": "^0.9.1",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "hls.js": "^1.6.0",
@@ -38,7 +39,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.2.2",
     "next": "^15.2.3",
-    "prisma": "^6.5.0",
+    "prisma": "^6.6.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tsx": "^4.19.3",
