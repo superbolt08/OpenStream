@@ -42,7 +42,7 @@ docker compose up
 Make sure you have **Docker** and **Postman** installed.
 
 ### 1. Build & Launch Containers
-
+__IMPORTANT NAVIGATE TO ML-SERVER FILE BEFORE STARTING UP__
 ```bash
 docker compose up --build
 ```
@@ -87,7 +87,7 @@ docker compose up
 - Segments are saved in: `/app/segments` inside the **inference container**
 
 To test output:
-- GET `http://localhost:8080/segments`  
+- GET `http://localhost:8080/segments` 
   Returns something like:
 
 ```json
