@@ -2,12 +2,10 @@
 
 A cloud-based real-time video streaming and distributed computing platform built on a scalable Raspberry Pi cluster. This project is developed for CMPE 246 at UBC Okanagan and integrates edge computing, machine learning, and web development technologies.
 
-
 <img src="images/PiStack1.jpeg" alt="Pi Stack" width="50%" />
 
 ## 📦 Project Structure
 ![System UML](images/System%20UML.png)
-
 
 ## 🧠 Core Features
 
@@ -43,14 +41,12 @@ A cloud-based real-time video streaming and distributed computing platform built
 - WSL
 - Docker Desktop
 
-
 ## 📊 Architecture
 
 - **Cluster**: Raspberry Pi 4 nodes connected via a switch, using K3s  
-- **Streaming**:  WebRTC feeds processed in parallel  
+- **Streaming**: WebRTC feeds processed in parallel  
 - **Web App**: User-friendly interface with dynamic video and event overlays  
 - **ML Tasks**: TensorFlow models for object recognition, adaptable with Strategy pattern  
-
 
 ---
 
@@ -64,6 +60,27 @@ A cloud-based real-time video streaming and distributed computing platform built
 
 ---
 
+## 🚀 Application of the Project
+
+The PiEdge Cloud platform is designed to address several practical use cases by leveraging a low-cost, scalable Raspberry Pi cluster. Key applications include:
+
+- **Real-Time Video Streaming:**  
+  Deliver live video feeds for remote monitoring, educational or entertainment broadcasts, and public safety applications with minimal latency.
+
+- **Edge Computing:**  
+  Process data closer to its source to reduce latency and improve responsiveness in IoT deployments, smart surveillance, and emergency response systems.
+
+- **Distributed Machine Learning:**  
+  Enable real-time object detection, face recognition, and data analysis by distributing machine learning tasks across multiple nodes.
+
+- **Cost-Effective Cloud Alternatives:**  
+  Offer a budget-friendly cloud platform for small businesses, educational institutions, and research organizations that may not afford traditional data centers.
+
+- **Scalable Research & Development:**  
+  Provide a modular environment for prototyping and testing new algorithms in distributed computing, video processing, and real-time analytics.
+
+---
+
 ## 📚 References
 
 - [Kubernetes K3s Docs](https://docs.k3s.io)
@@ -74,8 +91,8 @@ A cloud-based real-time video streaming and distributed computing platform built
 - 📽️ [Demo Video](http://www.youtube.com/watch?v=guBMEs41JM0)
 
 ---
-## 🗂️ Directory Structure
 
+## 🗂️ Directory Structure
 
 ### `app/`
 - Website application, including frontend and backend code.
@@ -85,9 +102,6 @@ A cloud-based real-time video streaming and distributed computing platform built
 
 ### `prisma/`
 - Prisma ORM configuration and schema definitions for interacting with the MongoDB database.
-
-### `stream-server/`
-- Code/config for the video streaming server component.
 
 ### `stream-server/`
 - Code/config for the video streaming server component.
@@ -121,6 +135,7 @@ A cloud-based real-time video streaming and distributed computing platform built
   - [OpenStream_README.md](https://github.com/superbolt08/OpenStream/blob/main/OpenStream_README.md)
 
 ---
+
 ## ✅ Submission Checklist
 
 - [x] Midterm proposal PDF
@@ -129,6 +144,20 @@ A cloud-based real-time video streaming and distributed computing platform built
 - [x] Source code (web & ML)
 - [x] Demo video
 - [x] README documentation
+
+---
+
+## 👥 Team Members
+
+| **Name**         | **Role**                                                                                     |
+|------------------|----------------------------------------------------------------------------------------------|
+| Patrick Agnimel  | Team Lead – Responsible for quality assurance, documentation, and website development.       |
+| Johan Gonzaga    | Lead Machine Learning Developer – Integrates TensorFlow and Python-based distributed algorithms.|
+| Syed Saad Ali    | Project Manager & System Architecture Lead – Coordinates hardware, networking, and software integration. |
+| Michael Zhang    | Web Development Team – Assists with frontend/backend development and database integration.  |
+| Algernon Ren     | Infrastructure & Hardware Assembly Specialist – Oversees Raspberry Pi cluster setup and networking. |
+| Jia Yi Lu        | Operations & Maintenance Coordinator – Manages version control, CI/CD pipeline, and documentation upkeep. |
+
 ---
 
 ## 📄 License
