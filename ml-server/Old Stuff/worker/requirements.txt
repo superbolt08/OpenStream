@@ -1,0 +1,4 @@
+pyzmq==25.1.2
+opencv-python-headless==4.8.0.76
+numpy==1.26.4
+ffmpeg-python==0.2.0
