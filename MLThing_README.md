@@ -1,47 +1,109 @@
-# How does this work?
-- The machine learning segement of our project is relegated to 3 nodes each a specific task.
-## What do each of them do?
+# How Does This Work?
+
+The machine learning segment of our project is split into **three nodes**, each with a specific task:
+
+## Node Responsibilities
+
 ### Fetcher
-- This node is responsible to detect when someone begins a stream and starts to record their camera to be sent to the inference worker.
+- Detects when a user starts a stream.
+- Begins recording the user's camera and sends data to the inference worker.
+
 ### Inference Worker
-- This node is responsible to run the machine learning model (YOLOV5n) to do facial and object detection,
-### Visualizer 
-- This node (likely the weakest) is responsible for grabbing the segements and displaying them onto the website.
+- Runs the YOLOv5n model for **facial and object detection**.
 
-# How does the stuff run?
-- In this segment we utilized docker to host 4 different containers to allow each node to work independantly from eachother. Where the database is located within the master node (The one with the SSD).
-- Each segement has their own dockerfile and is ran by one docker-compose file. Where each service is connected via a socket for communication.
-- To fully run it we need to preform a command docker compose up, then if we want to change anything we use: docker compose down then up again.
+### Visualizer
+- Grabs processed video segments and displays them on the website (lightweight node).
 
-# How to start the process without front end?
-### Note: Make sure you have postman and docker installed or this will not work.
-- __If this is your first time:__ In bash type: docker compose up --build this will construct the containers (Note: It will take a significant amount of time to build.)
-- In bash terminal type: docker compose up and wait until each container is online and the model is loaded
-    - Get a stream link from the website
-    - In postman use the drop down button to put the link into the database and record it's id.
-        - node the link is called: http://localhost:8000/add_stream
-        - select body from the menu and select json as the format.
-        - in the body type the following command and replace whatever is needed:
-        {
-            "url":"Your Stream URL goes here"
-            "name":"Your Stream name goes here"
-        }
-        - This will return the name and the id used to start to process
-    - In postman create a new tab and use the drop down to select post again, using the text box type: http://localhost:8000/start
-    - In the same menu as before with the json format you want to put the id from the database so the inference worker knows what to start with
-    {
-        "id":"id you got from postman"
-    }
-    - This will return a string that says "Stream successfully started!"
-- inference_worker.py will work asychronously with the other files to create output
-- if you want to view output it is located within /app/segments within the inference container on docker
-- to test if you have segments type in the link http://localhost:8080/segments into postman using get, this will list an array of elements named segement_XXX_yolo.mp4. This segement is a four second clip that is processed and rendered with the box drawn.
+---
 
-## Other Functions 
-- we have a health chekc is for general debugging can be run by using postman command: http://localhost:8000/
-- we can stop streams using GET http://localhost:8000/stop/stream_id
-- I originally used a test utilizing my webcam using http://localhost/test/webcam
-### Visualize functions
-- Pretty simple stuff just a function to test wether or not the port works http://localhost:8080/test
-- http://localhost:8080/segments list segments within the inference file
-- http://localhost:8080/gements/{filename} reads the files
+# How Is It Run?
+
+We use **Docker** to host four containers, allowing each node to run independently.  
+- The **database** is located within the **master node** (with the SSD).
+- Each segment has its own `Dockerfile`.
+- They are all run through one `docker-compose.yml` file.
+- Communication happens via **ZeroMQ sockets**.
+
+### Starting the system:
+
+```bash
+# Initial build
+docker compose up --build
+
+# After changes
+docker compose down
+docker compose up
+```
+
+---
+
+# How to Start Without a Frontend
+
+Make sure you have **Docker** and **Postman** installed.
+
+### 1. Build & Launch Containers
+
+```bash
+docker compose up --build
+```
+
+This may take some time on first run.
+
+Once built:
+
+```bash
+docker compose up
+```
+
+### 2. Add a Stream URL (via Postman)
+
+- POST `http://localhost:8000/add_stream`
+- Set body → raw → JSON:
+
+```json
+{
+  "url": "Your Stream URL goes here",
+  "name": "Your Stream name goes here"
+}
+```
+
+- You'll get back a stream ID.
+
+### 3. Start the Stream
+
+- POST `http://localhost:8000/start`
+- Set body → raw → JSON:
+
+```json
+{
+  "id": "ID you got from Postman"
+}
+```
+
+- Response: `"Stream successfully started!"`
+
+### 4. Segment Output Location
+
+- Segments are saved in: `/app/segments` inside the **inference container**
+
+To test output:
+- GET `http://localhost:8080/segments`  
+  Returns something like:
+
+```json
+["segment_001_yolo.mp4", "segment_002_yolo.mp4", ...]
+```
+
+---
+
+## Other Functions
+
+### FastAPI Healthcheck & Controls
+- Healthcheck: GET `http://localhost:8000/`
+- Stop a stream: GET `http://localhost:8000/stop/{stream_id}`
+- Webcam test (legacy): GET `http://localhost/test/webcam`
+
+### Visualizer Endpoints
+- Test port: GET `http://localhost:8080/test`
+- List segments: GET `http://localhost:8080/segments`
+- Read segment file: GET `http://localhost:8080/segments/{filename}`
