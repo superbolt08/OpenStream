@@ -10,23 +10,61 @@ A cloud-based real-time video streaming and distributed computing platform built
 ## 🧠 Core Features
 
 - **Raspberry Pi Cluster (3 Nodes)**  
-  - Master node runs Kubernetes (K3s) for container orchestration
+  - Master node runs Kubernetes (K3s) for container orchestration  
   - High-speed Gigabit networking for distributed communication
 
 - **Wireless Video Capture & Processing**  
-  - A Pi with Camera Module 3 streams video to the cluster
+  - A Pi with Camera Module 3 streams video to the cluster  
   - Real-time ML tasks: face/object detection using TensorFlow
 
 - **Web Streaming Application**  
-  - Built with Next.js (React + TypeScript) and Node.js backend
+  - Built with Next.js (React + TypeScript) and Node.js backend  
   - Live video feed and event-based messaging overlay
 
 - **Database Integration**  
-  - Prisma ORM with MongoDB for real-time and persistent data
+  - Prisma ORM with MongoDB for real-time and persistent data  
   - Scalable design for future multi-user features
 
 - **Design Patterns Used**  
   - Singleton (master node), Factory (node scaling), Strategy (ML models), Observer (stream updates), MVC (web app), Adapter (protocols)
+
+---
+
+## 👥 Team Members
+
+| **Name**         | **Role**                                                                                     |
+|------------------|----------------------------------------------------------------------------------------------|
+| Patrick Agnimel  | Team Lead – Responsible for quality assurance, documentation, and website development.       |
+| Johan Gonzaga    | Lead Machine Learning Developer – Integrates TensorFlow and Python-based distributed algorithms.|
+| Syed Saad Ali    | Project Manager & System Architecture Lead – Coordinates hardware, networking, and software integration. |
+| Michael Zhang    | Web Development Team – Assists with frontend/backend development and database integration.    |
+| Algernon Ren     | Infrastructure & Hardware Assembly Specialist – Oversees Raspberry Pi cluster setup and networking. |
+| Jia Yi Lu        | Operations & Maintenance Coordinator – Manages version control, CI/CD pipeline, and documentation upkeep. |
+
+---
+
+## 🤝 Communication and Collaboration
+
+- **Primary Communication Tools:**
+  - Discord chat group for day-to-day communication.
+  - Email for formal or long-form communications.
+  - Discord video calls for online meetings.
+
+- **Document Collaboration:**
+  - Google Docs for real-time collaborative work on reports and meeting notes.
+  - GitHub Repository for documentation.
+
+- **Version Control and Task Tracking:**
+  - Git and GitHub for version control.
+  - GitHub Actions for CI/CD and automation.
+  - Kanban board and GitHub Projects for task tracking and progress monitoring.
+
+- **Meeting Schedule:**
+  - Daily scrum meetings (time TBD) to discuss progress and challenges.
+  - Weekly sprint meetings every Sunday from 1 PM to 3 PM (in person).
+  - Weekly sub-meetings during CMPE 246 Lab sessions.
+
+---
 
 ## 🚀 Getting Started
 
@@ -41,28 +79,30 @@ A cloud-based real-time video streaming and distributed computing platform built
 - WSL
 - Docker Desktop
 
+---
+
 ## 📊 Architecture
 
-- **Cluster**: Raspberry Pi 4 nodes connected via a switch, using K3s  
-- **Streaming**: WebRTC feeds processed in parallel  
-- **Web App**: User-friendly interface with dynamic video and event overlays  
-- **ML Tasks**: TensorFlow models for object recognition, adaptable with Strategy pattern  
+- **Cluster:** Raspberry Pi 4 nodes connected via a switch, managed with Kubernetes (K3s).  
+- **Streaming:** WebRTC feeds processed in parallel.  
+- **Web App:** User-friendly interface with dynamic video and event overlays.  
+- **ML Tasks:** TensorFlow models for object recognition, adaptable using the Strategy pattern.
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: Next.js, React 
-- **Backend**: Node.js, Express, TypeScript 
-- **ML**: TensorFlow, Python  
-- **Database**: Prisma, MongoDB  
-- **Containerization**: Docker, Kubernetes (K3s)  
+- **Frontend:** Next.js, React
+- **Backend:** Node.js, Express, TypeScript
+- **ML:** TensorFlow, Python
+- **Database:** Prisma, MongoDB
+- **Containerization:** Docker, Kubernetes (K3s)
 
 ---
 
 ## 🚀 Application of the Project
 
-The PiEdge Cloud platform is designed to address several practical use cases by leveraging a low-cost, scalable Raspberry Pi cluster. Key applications include:
+The PiEdge Cloud platform addresses several practical use cases by leveraging a low-cost, scalable Raspberry Pi cluster. Key applications include:
 
 - **Real-Time Video Streaming:**  
   Deliver live video feeds for remote monitoring, educational or entertainment broadcasts, and public safety applications with minimal latency.
@@ -74,19 +114,19 @@ The PiEdge Cloud platform is designed to address several practical use cases by 
   Enable real-time object detection, face recognition, and data analysis by distributing machine learning tasks across multiple nodes.
 
 - **Cost-Effective Cloud Alternatives:**  
-  Offer a budget-friendly cloud platform for small businesses, educational institutions, and research organizations that may not afford traditional data centers.
+  Provide a budget-friendly cloud platform for small businesses, educational institutions, and research organizations unable to afford traditional data centers.
 
 - **Scalable Research & Development:**  
-  Provide a modular environment for prototyping and testing new algorithms in distributed computing, video processing, and real-time analytics.
+  Offer a modular environment for prototyping and testing new algorithms in distributed computing, video processing, and real-time analytics.
 
 ---
 
 ## 📚 References
 
 - [Kubernetes K3s Docs](https://docs.k3s.io)
-- [TensorFlow](https://www.tensorflow.org/)  
-- [Raspberry Pi Clustering Tutorial](https://www.raspberrypi.com/tutorials/cluster-raspberry-pi-tutorial/)  
-- [Docker Swarm Setup](https://docs.docker.com/engine/swarm/)  
+- [TensorFlow](https://www.tensorflow.org/)
+- [Raspberry Pi Clustering Tutorial](https://www.raspberrypi.com/tutorials/cluster-raspberry-pi-tutorial/)
+- [Docker Swarm Setup](https://docs.docker.com/engine/swarm/)
 - 🌐 [Public Website Repository](https://github.com/superbolt08/OpenStream)
 - 📽️ [Demo Video](http://www.youtube.com/watch?v=guBMEs41JM0)
 
@@ -133,7 +173,8 @@ The PiEdge Cloud platform is designed to address several practical use cases by 
 - Main documentation for the repository, including setup instructions and project description.
   - [MLThing_README.md](https://github.com/superbolt08/OpenStream/blob/main/MLThing_README.md)
   - [OpenStream_README.md](https://github.com/superbolt08/OpenStream/blob/main/OpenStream_README.md)
-
+  - [Timeline_README.md](https://github.com/superbolt08/OpenStream/blob/main/Timeline_README.md)
+    
 ---
 
 ## ✅ Submission Checklist
@@ -144,19 +185,6 @@ The PiEdge Cloud platform is designed to address several practical use cases by 
 - [x] Source code (web & ML)
 - [x] Demo video
 - [x] README documentation
-
----
-
-## 👥 Team Members
-
-| **Name**         | **Role**                                                                                     |
-|------------------|----------------------------------------------------------------------------------------------|
-| Patrick Agnimel  | Team Lead – Responsible for quality assurance, documentation, and website development.       |
-| Johan Gonzaga    | Lead Machine Learning Developer – Integrates TensorFlow and Python-based distributed algorithms.|
-| Syed Saad Ali    | Project Manager & System Architecture Lead – Coordinates hardware, networking, and software integration. |
-| Michael Zhang    | Web Development Team – Assists with frontend/backend development and database integration.  |
-| Algernon Ren     | Infrastructure & Hardware Assembly Specialist – Oversees Raspberry Pi cluster setup and networking. |
-| Jia Yi Lu        | Operations & Maintenance Coordinator – Manages version control, CI/CD pipeline, and documentation upkeep. |
 
 ---
 
