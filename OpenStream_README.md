@@ -6,238 +6,264 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 - **Database:** A MongoDB container (using the official mongo image)
 - **Mongo Express:** A web-based MongoDB admin interface
 
-> **Note:** This project uses a custom environment file (`.env.devlopment`) for configuration.
-
-- See .example.env.development for example 
+> **Note:** This project uses a custom environment file (`.env.development`) for configuration.
+> - See `.example.env.development` for an example.
 
 ## Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/)
 - [Docker Compose](https://docs.docker.com/compose/)
-- [Nodejs](https://nodejs.org)
-- [Ant Media Server Community Edition Zip File](https://github.com/ant-media/Ant-Media-Server) : to be placed in stream-server folder
+- [Node.js](https://nodejs.org)
+- [Ant Media Server Community Edition Zip File](https://github.com/ant-media/Ant-Media-Server)
 
 ## Getting Started
 
-## Set Up
-1. Run `npm i` to install packages. May need `sudo` if on WSL
+### Set Up
+1. Run `npm i` in the project root folder to install packages. (May need `sudo` if on WSL.)
+2. Navigate to `/websocket` and run `npm i` to install its dependencies.
+3. Download the Ant Media Server Community Edition zip file, rename it to `ant-media-server.zip`, and place it in `/stream-stream`.
+4. Create a `.env.development` file based on the contents of `.example.env.development` (no need to add username and password).
 
-### Running the Containers
+### Running the Application
 
-1. Make sure you have docker installed and open on your computer
-2. Navigate to the project folder
-3. Fill out the *.env.devlopment* file from the *.example.env.devlopment* file (no need to add username and password)
+Ensure that Docker is running and Node.js is installed on your computer. Then follow these steps:
 
-To build and start all the services, run the following command in your project directory:
-
-```bash
-npm run app:start  # Starts the container
-npm run app:build  # Builds the container
-npm run app:stop   # Stops the container
-
-# The above commands are part of our Task Manager Application workflow.
-# app:build builds the container, app:start just starts the container (already built), and app:stop stops the container.
-
-````
-
-## Start the website
-First time use:
-1. Open Docker Desktop
-2. Create a .env.development file
-3. Copy the code in .example.env.development & paste it into .env.development file
-```bash
-docker compose up -d
-npm run app:start
-````
-
-If not first time:
-1. Open Docker Desktop
-```bash
-npm run app:start
-````
-
-Using the services:
-1. Observe the containers' status, proceed if all containers started and runing in healthy condition
-2. Access Mongo Express: http://localhost:8081/
-3. Access OpenStream website: http://localhost:3000/
-4. To get the link (if stream started)
-     1. View "dev"
-     2. View "Stream"
-     3. Click the blue link icon of the active stream
-     4. Copy playbackURL (e.g. http://localhost:5080/WebRTCApp/streams/xxxxxxxx)
-     5. Replace "localhost" with the IP address
-5. Use npm run app:stop or ctrl + C to gracefully exit the program
+1. **Initial Setup (First Time Use):**
+   - Open Docker Desktop.
+   - Confirm that `.env.development` is created and populated.
+   - Build and start all services by running:
+     ```bash
+     docker compose up -d
+     npm run app:build   # (If not already built)
+     npm run app:start
+     ```
+2. **Subsequent Runs:**
+   - Open Docker Desktop (if necessary).
+   - Simply start the application by running:
+     ```bash
+     npm run app:start
+     ```
+3. **Shutting Down:**
+   - When finished, stop all services with:
+     ```bash
+     npm run app:stop
+     ```
+4. **Accessing Database Admin interface :**
+   - Verify that all containers are running in a healthy state.
+   - Access Mongo Express at: [http://localhost:8081/](http://localhost:8081/)
+   - Access the OpenStream website at: [http://localhost:3000/](http://localhost:3000/)
+   - To obtain a streaming link (if a stream is active):
+     - Navigate to "dev" then "Stream".
+     - Click the blue link icon of the active stream.
+     - Copy the `playbackURL` (e.g., `http://localhost:5080/WebRTCApp/streams/xxxxxxxx`).
+     - Replace "localhost" with the appropriate IP address if necessary.
 
 ---
 
 ## 📁 Major Files
 
-## Root directory👇
+### Root Directory
 
-### `docker-compose.yaml`
+#### `docker-compose.yaml`
 Defines a full-stack development environment using Docker Compose. It spins up multiple services: a Node.js backend (`app-server`) with Prisma and MongoDB (`mongo-db`) in replica set mode, a WebSocket server (`websocket`) for real-time communication, and an Ant Media Server (`stream-server`) for live video streaming over RTMP, WebRTC, and HLS. `mongo-express` provides a web UI for managing the database. Health checks, volumes, and environment variables are configured for smooth orchestration.
 
-### `Dockerfile`
+#### `Dockerfile`
 Builds a lightweight container for the backend using Node.js 18 (Alpine). It sets the working directory to `/app-server`, disables Next.js telemetry, sets the `NODE_ENV`, installs dependencies, copies the app files, exposes port 3000, and runs the development server via `npm run dev`.
 
-### `eslint.config.mjs`
-Configures ESLint using the modern `FlatCompat` utility to maintain compatibility with legacy `extends` setups. It resolves paths using `import.meta.url` and applies recommended Next.js rules for `core-web-vitals` and TypeScript support.
+#### `eslint.config.mjs`
+Configures ESLint using the modern `FlatCompat` utility to maintain compatibility with legacy `extends` setups. It resolves paths using `import.meta.url` and applies recommended Next.js rules for core web vital metrics and TypeScript support.
 
-### `.gitignore`
+#### `.gitignore`
 Specifies which files and directories should be excluded from version control. It ignores build outputs, environment files, debug logs, dependency folders (`node_modules`, `.yarn`, `.pnp`), Ant Media zip files, and project-specific files like `mongo-keyfile`.
 
-### `next.config.ts`
-A type-safe Next.js configuration file that imports the `NextConfig` type and exports a customizable config object. Currently empty, it's ready for options like `reactStrictMode`, rewrites, or image optimization settings.
+#### `next.config.ts`
+A type-safe Next.js configuration file that imports the `NextConfig` type and exports a customizable config object. It is currently empty, but ready for options like `reactStrictMode`, rewrites, or image optimization settings.
 
-### `package-lock.json`
-This file is automatically generated by npm to lock the dependencies and their versions for the project. It ensures that the same dependency tree is installed across all environments, providing consistency in builds.
+#### `package-lock.json`
+Automatically generated by npm to lock dependencies and their versions for the project. It ensures that the same dependency tree is installed across all environments, providing consistency in builds.
 
-### `package.json`
-This file contains metadata about the project, including dependencies, scripts, and configuration for tools like ESLint and Next.js. It defines the project's name, version, and main entry points, along with the necessary scripts for building, running, and testing the app. The `dependencies` and `devDependencies` sections list the packages required to run and develop the project.
+#### `package.json`
+Contains metadata about the project, including dependencies, scripts, and configuration for tools like ESLint and Next.js. It defines the project’s name, version, and main entry points, along with necessary scripts for building, running, and testing the app. The `dependencies` and `devDependencies` sections list packages required for both runtime and development.
 
-### `tsconfig.json`
-This TypeScript configuration file defines the compiler options and project settings for the application. It specifies the JavaScript target (`ES2017`), enables strict type-checking with `strict: true`, and allows JavaScript files to be included in the compilation process (`allowJs: true`). The `moduleResolution` is set to `bundler`, and `esModuleInterop` is enabled for seamless imports. The file includes paths for custom aliases (`@/*`), and enables support for JSX and incremental builds. Additionally, the `include` section ensures TypeScript compiles files across various directories, including Next.js files, components, and server code. The `exclude` section ignores the `node_modules` folder to optimize the compilation.
+#### `tsconfig.json`
+Defines the TypeScript configuration for the application. It specifies the JavaScript target (`ES2017`), enables strict type-checking (`strict: true`), allows JavaScript files to be included (`allowJs: true`), sets module resolution to `bundler`, and enables `esModuleInterop` for seamless imports. Custom alias paths (`@/*`) are included, and it supports JSX and incremental builds. The `node_modules` folder is excluded for optimized compilation.
 
-## Prisma👇
+---
+
+## Prisma
 
 ### `index.ts` (Prisma Client)
-This file initializes and manages the Prisma client, ensuring that only a single instance is used during development to prevent unnecessary database connections. It creates a `PrismaClient` instance and assigns it to the global object in non-production environments. In production, a new instance is created on each invocation to ensure proper handling of database connections. The `main` function logs the `DATABASE_URL` to verify the connection string, and the script gracefully handles errors and ensures that the Prisma client is disconnected after execution.
+Initializes and manages the Prisma client, ensuring that a single instance is used during development to prevent unnecessary database connections. In non-production, it assigns the Prisma client instance to the global object; in production, a new instance is created on each invocation. The main function logs the `DATABASE_URL` to verify the connection string and gracefully handles errors while ensuring proper disconnection of the Prisma client.
 
 ### `schema.prisma`
-This is the Prisma schema file that defines the data models and relationships for the application. It specifies the use of **MongoDB** as the database provider and the connection string is sourced from the `DATABASE_URL` environment variable. The schema includes three models:
+Defines the data models and relationships for the application using **MongoDB** as the database provider. The connection string is sourced from the `DATABASE_URL` environment variable. It includes three models:
 
-- **`Stream`**: Represents a video stream with properties like `title`, `active` status, and a `playbackURL`. It also has relationships to `Chat` and `Session` models.
+- **`Stream`**: Represents a video stream with properties like `title`, active status, and a `playbackURL`. It also defines relationships with the `Chat` and `Session` models.
 - **`Chat`**: Represents the chat associated with a stream. Each `Chat` is tied to a `Stream`, and its `streamId` is unique.
-- **`Session`**: Represents a user session, including the user information, session expiration time, and a unique `streamKey`. It is related to a `Stream` model, but the relationship is optional.
+- **`Session`**: Represents a user session, including user information, session expiration time, and a unique `streamKey`. The relationship to a `Stream` model is optional.
 
-The schema uses MongoDB's native `ObjectId` type for primary keys and foreign keys, ensuring proper mapping for MongoDB's unique identifier format.
+MongoDB's native `ObjectId` type is used for primary and foreign keys, ensuring proper mapping of unique identifiers.
 
-## App👇
+---
+
+## App
 
 ### `page.tsx`
-This is the main page component for the app, rendered at the root URL (`/`). It uses React's `useEffect` hook to programmatically navigate the user to the `/browse` page as soon as the component mounts, leveraging Next.js's `useRouter` hook. The component also includes some placeholder content (`Hello world` and some text) to make the page visually longer. The redirect ensures that the user is automatically redirected to the browse page on load.
+The main page component for the app, rendered at the root URL (`/`). It uses React's `useEffect` hook to programmatically redirect the user to the `/browse` page upon mounting, leveraging Next.js's `useRouter` hook. It includes placeholder content ("Hello world" and additional text) to ensure the page has sufficient content and automatically redirects users to the browse page.
 
 ### `page.module.css`
-This CSS module defines the styles for the main page layout and components, using CSS variables for customization and theming. It includes responsive design elements that adjust the layout based on the user's preferred color scheme (light or dark) and screen size.
+A CSS module that defines styles for the main page layout and components. It uses CSS variables for theme customization and includes responsive design elements that adjust for different screen sizes and preferred color schemes.
 
-- **Page Layout**: The `.page` class defines a grid layout with centered content and padding. It includes variables for color scheme adjustments (e.g., button hover states) and ensures the page takes up at least the full viewport height.
-- **Main Content**: The `.main` class uses Flexbox for vertical alignment and spacing. It also includes custom styles for ordered lists (`ol`) and inline code blocks (`code`).
-- **Buttons**: The `.ctas` class contains styles for call-to-action buttons, including primary and secondary button styles with hover effects.
-- **Footer**: The `.footer` class styles the footer with flex alignment, and the links are designed to display an underline on hover.
-- **Mobile Responsiveness**: Several media queries adjust padding, button sizes, and layout for smaller screen sizes (max-width: 600px).
-- **Additional Styles**: There are additional styles for elements like `.container`, `.title`, `.livestream`, `.thumbnail`, and `.button` to style a content container, livestream items, and buttons with hover effects.
-
-This file ensures the page is visually appealing across various screen sizes and color schemes while maintaining a consistent user experience.
+- **Page Layout:**  
+  Defines a grid layout with centered content and padding, including variables for color adjustments (e.g., button hover states) ensuring the page occupies at least the full viewport height.
+- **Main Content:**  
+  Utilizes Flexbox for vertical alignment and spacing, with custom styles for ordered lists (`ol`) and inline code blocks (`code`).
+- **Buttons:**  
+  Provides styles for call-to-action buttons with primary and secondary variations and hover effects.
+- **Footer:**  
+  Styles the footer with flex alignment, with links that underline on hover.
+- **Mobile Responsiveness:**  
+  Media queries adjust padding, button sizes, and layout for screens smaller than 600px.
+- **Additional Styles:**  
+  Includes styles for content containers, titles, livestream items, and buttons, ensuring consistency across themes.
 
 ### `layout.tsx`
-This file defines the root layout of the Next.js application, including global styles, metadata, and context providers for the application. It is responsible for setting up the main structure for the app's pages and rendering common elements.
+Defines the root layout of the Next.js application, incorporating global styles, metadata, and context providers. It wraps each page with common elements, including:
 
-- **Font Setup**: It imports the `Inter` font from Google Fonts and generates a CSS variable (`--font-inter`) for usage throughout the application.
-- **Metadata**: The `metadata` object defines the title and description for the site, which is used for SEO purposes and displayed in the browser's tab.
-- **Context Providers**: The layout wraps the application with two context providers:
-  - **`SocketProvider`**: provides WebSocket connection management for real-time communication.
-  - **`StreamProvider`**: Provides the stream-related context, possibly managing the state of live streams or streaming data.
-- **Navbar**: The `Navbar` component is rendered at the top of the page, receiving the `user` object (fetched asynchronously using the `getUser()` function) as a prop to display user-related information.
-- **Children Rendering**: The `children` prop represents the dynamic content for each page, rendered within the layout. This allows the layout to wrap around individual page content.
-
-This layout provides a consistent structure and common functionality (like WebSocket connections and stream context) across all pages of the application.
+- **Font Setup:**  
+  Imports the `Inter` font from Google Fonts and creates a CSS variable (`--font-inter`) for consistent typography.
+- **Metadata:**  
+  Sets the site's title and description for SEO and browser display purposes.
+- **Context Providers:**  
+  Wraps the application with `SocketProvider` (managing WebSocket connections) and `StreamProvider` (handling stream-related context).
+- **Navbar:**  
+  Renders a `Navbar` component at the top of the page, which receives a user object (fetched asynchronously using `getUser()`) for displaying user information.
+- **Children Rendering:**  
+  Uses the `children` prop to render dynamic content for each page within the common layout.
 
 ### `global.css`
-This file contains global styles and theme configuration for the application, ensuring consistent design across all pages.
+Contains global styles and theme configurations to ensure a consistent design across all pages.
 
-- **Theme Colors**: It defines two primary CSS variables for the theme's colors:
-  - `--background`: Sets the background color of the app (`#0a0a0a`, a dark shade).
-  - `--foreground`: Sets the text color to `ghostwhite`.
-  - The same colors are used in dark mode, ensuring a consistent visual appearance across themes.
+- **Theme Colors:**  
+  Defines primary CSS variables for the app's background (`#0a0a0a`) and text (`ghostwhite`).
+- **Overflow Control:**  
+  Prevents horizontal overflow on `html` and `body` elements, maintaining a clean layout.
+- **Body Styling:**  
+  Applies the defined background and foreground colors along with the **Inter** font for smooth text rendering.
+- **Box Model Reset:**  
+  Sets all elements to `box-sizing: border-box` and resets padding and margins to `0`.
+- **Link Styling:**  
+  Ensures links inherit the text color and removes default underlines.
+- **Dark Mode:**  
+  Includes a media query for `prefers-color-scheme: dark` to enforce a dark color scheme based on system preferences.
 
-- **Overflow Control**: The `html` and `body` elements are styled to prevent horizontal overflow, maintaining a clean layout without unwanted scrollbars.
+---
 
-- **Body Styling**: The body is styled to use the defined background and foreground colors, with the **Inter** font as the primary font. It ensures smooth text rendering using font smoothing properties for better readability.
+## Application Pages
 
-- **Box Model Reset**: All elements (`*`) are set to `box-sizing: border-box`, meaning padding and borders will be included in the element's total width and height. Additionally, padding and margins are reset to `0`.
+The application consists of three main pages—**Browse**, **Stream**, and **Viewer**—each designed to provide a distinct user experience:
 
-- **Link Styling**: Links (`a` tags) inherit the text color from their parent elements, and the underline is removed, providing a clean, consistent look.
+### Browse Page (`/browse`)
+- **Purpose:**  
+  Displays a grid of live streams for users to browse. It fetches active streams from the API (`/api/stream/get`) and renders each stream using a `StreamCard` component.
+- **Key Files:**  
+  - `page.tsx` in the `browse` folder.
+  - `browse.module.css` for page-specific styles.
+- **Functionality:**  
+  - Asynchronously retrieves stream data using the `getStreams()` function.
+  - Dynamically renders a list of live stream cards.
 
-- **Dark Mode**: There is a media query for `prefers-color-scheme: dark`, which explicitly sets a dark color scheme in the root for browsers in dark mode, ensuring that the app respects system theme preferences.
+### Stream Page (`/stream`)
+- **Purpose:**  
+  Designed for streamers to broadcast live video. This page includes a video section with an overlay displaying stream information such as title, duration, and chat functionality.
+- **Key Files:**  
+  - `page.tsx` in the `stream` folder.
+  - `stream.module.css` for styling.
+- **Functionality:**  
+  - Utilizes context providers (`useStream` and `useSocket`) to manage streaming and real-time chat.
+  - Automatically updates stream duration and handles sending/receiving chat messages.
 
-This `global.css` provides fundamental design rules, color theming, and ensures the layout is clean, functional, and adaptive to different system themes.
+### Viewer Page (`/viewer/[streamId]`)
+- **Purpose:**  
+  Allows viewers to watch live streams by accessing a unique stream via its `streamId`. This page provides a video player (using an HLS video component) along with a real-time chat interface.
+- **Key Files:**  
+  - `page.tsx` in the `viewer/[streamId]` folder.
+- **Functionality:**  
+  - Fetches specific stream details using the `streamId` parameter from the URL.
+  - Handles user login for chat functionality if needed.
+  - Displays real-time chat messages and updates the stream duration.
+
+---
 
 ## API Endpoints Documentation
 
-This document outlines the available API endpoints for the Video Streaming Application. It provides a brief overview of each endpoint, including its purpose, method, and expected request/response details. Authentication is required for endpoints that modify streaming data.
+This section outlines the available API endpoints for the Video Streaming Application, detailing each endpoint's purpose, method, and expected request/response format. Authentication is required for endpoints that modify streaming data.
 
-## Authentication Endpoints
+### Authentication Endpoints
 
-### `/api/auth/getUser`
+#### `/api/auth/getUser`
 - **Method:** GET  
-- **Description:**  
-  Retrieves the details of the current authenticated user session.
+- **Description:** Retrieves details of the current authenticated user session.
 - **Response:**  
   - If authenticated, returns user session information.
-  - If the user is not authenticated, returns an error with status code `401`.
+  - If not authenticated, returns an error with status code `401`.
 
 ---
 
-### `/api/auth/signup`
+#### `/api/auth/signup`
 - **Method:** POST  
-- **Description:**  
-  Creates a new user session.
-  Generate a session token and save it in the client's browser.
+- **Description:** Creates a new user session. Generates a session token and saves it in the client's browser.
 - **Request Body:**  
   - `username` (string): The username for session creation.
 - **Response:**  
-  - On success, returns a message confirming the session creation along with the provided username.
-  - If the `username` is missing, returns an error with status code `400`.
+  - On success, returns a message confirming session creation along with the provided username.
+  - If `username` is missing, returns an error with status code `400`.
 
 ---
 
-### `/api/auth/update`
+#### `/api/auth/update`
 - **Method:** POST  
-- **Description:**  
-  Updates the current user session with new details.
+- **Description:** Updates the current user session with new details.
 - **Request Body:**  
   - `username` (string): The updated username.
 - **Response:**  
   - On success, returns a message confirming the session update.
-  - If the `username` is missing, returns an error with status code `400`.
+  - If `username` is missing, returns an error with status code `400`.
 
 ---
 
-## Stream Endpoints
+### Stream Endpoints
 
-### `/api/stream/start`
+#### `/api/stream/start`
 - **Method:** PATCH  
-- **Description:**  
-  Initiates a video stream for the authenticated user.
+- **Description:** Initiates a video stream for the authenticated user.
 - **Workflow:**  
-  1. Verifies the user session.
-  2. Generates a new stream key and updates the session record.
+  1. Verifies the user session.  
+  2. Generates a new stream key and updates the session record.  
   3. Constructs the playback URL and marks the stream as active.
 - **Response:**  
-  - On success, returns a message `"Stream started successfully"`, the stream information (including stream ID, streamer username, title, playback URL, creation time, and chat ID), and the newly generated stream key.
-  - If the user is not authenticated, returns an error with status code `401`.
+  - On success, returns a message `"Stream started successfully"`, along with stream information (including stream ID, streamer username, title, playback URL, creation time, and chat ID) and the newly generated stream key.
+  - If not authenticated, returns an error with status code `401`.
   - If no stream exists for the session, returns an error with status code `400`.
 
 ---
 
-### `/api/stream/get`
+#### `/api/stream/get`
 - **Method:** GET  
-- **Description:**  
-  Retrieves a list of active streams.
+- **Description:** Retrieves a list of active streams.
 - **Workflow:**  
   1. Fetches active stream keys from the WebSocket server.
   2. Updates stream statuses in the database based on active sessions.
-  3. Returns a list of active streams.
+  3. Returns an array of active stream details.
 - **Response:**  
-  - On success, returns a message `"Streams updated successfully"` along with an array of active stream details (each containing stream ID, streamer username, title, playback URL, creation time, and chat ID).
-  - On failure, returns an error message with appropriate status codes (`400` or `500`).
+  - On success, returns a message `"Streams updated successfully"` along with active stream details (each including stream ID, streamer username, title, playback URL, creation time, and chat ID).
+  - On failure, returns an error message with status codes `400` or `500`.
 
 ---
 
-### `/api/stream/get/{streamId}`
+#### `/api/stream/get/{streamId}`
 - **Method:** GET  
-- **Description:**  
-  Retrieves detailed information for a specific stream.
+- **Description:** Retrieves detailed information for a specific stream.
 - **Path Parameter:**  
   - `streamId` (string): The unique identifier of the stream.
 - **Response:**  
@@ -246,39 +272,45 @@ This document outlines the available API endpoints for the Video Streaming Appli
 
 ---
 
-### `/api/stream/stop`
+#### `/api/stream/stop`
 - **Method:** DELETE  
-- **Description:**  
-  Ends an active stream for the authenticated user.
+- **Description:** Ends an active stream for the authenticated user.
 - **Workflow:**  
-  1. Verifies the user session.
-  2. Checks if an active stream exists for the session.
+  1. Verifies the user session.  
+  2. Checks if an active stream exists for the session.  
   3. Marks the stream as inactive.
 - **Response:**  
   - On success, returns a message `"Stream ended successfully"` along with the updated stream information.
-  - If the user is not authenticated, returns an error with status code `401`.
+  - If not authenticated, returns an error with status code `401`.
   - If no stream is found for the session, returns an error with status code `400`.
 
 ---
 
-### `/api/stream/title`
+#### `/api/stream/title`
 - **Method:** PATCH  
-- **Description:**  
-  Updates the title of the active stream.
+- **Description:** Updates the title of the active stream.
 - **Request Body:**  
   - `title` (string): The new title for the stream.
 - **Workflow:**  
-  1. Verifies the user session.
-  2. Confirms that a stream exists for the session.
+  1. Verifies the user session.  
+  2. Confirms that a stream exists for the session.  
   3. Updates the stream's title.
 - **Response:**  
   - On success, returns a message `"Stream title updated successfully"`.
-  - If the user is not authenticated, returns an error with status code `401`.
+  - If not authenticated, returns an error with status code `401`.
   - If the title is missing or no stream exists for the session, returns an error with status code `400`.
 
 ---
 
-**Note:**  
-All endpoints that alter stream state require valid session authentication. Ensure that your environment is set up correctly as described in this project documentation.
+**Note:** All endpoints that modify stream state require valid session authentication. Ensure your environment is correctly configured as described in this documentation.
 
+---
 
+## License
+
+This project is developed as part of a university course and is not licensed for commercial distribution.
+
+---
+
+📷 Powered by Raspberry Pi  
+⚡ Fueled by curiosity and collaboration
