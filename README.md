@@ -56,8 +56,8 @@ A cloud-based real-time video streaming and distributed computing platform built
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: Next.js, React, TypeScript  
-- **Backend**: Node.js, Express  
+- **Frontend**: Next.js, React 
+- **Backend**: Node.js, Express, TypeScript 
 - **ML**: TensorFlow, Python  
 - **Database**: Prisma, MongoDB  
 - **Containerization**: Docker, Kubernetes (K3s)  
@@ -66,15 +66,11 @@ A cloud-based real-time video streaming and distributed computing platform built
 
 ## 📚 References
 
-- [Kubernetes Docs](https://kubernetes.io/)  
+- [Kubernetes K3s Docs](https://docs.k3s.io)
 - [TensorFlow](https://www.tensorflow.org/)  
 - [Raspberry Pi Clustering Tutorial](https://www.raspberrypi.com/tutorials/cluster-raspberry-pi-tutorial/)  
 - [Docker Swarm Setup](https://docs.docker.com/engine/swarm/)  
-
 - 🌐 [Public Website Repository](https://github.com/superbolt08/OpenStream)
-- 🌐 UBC Internal Repos *(Access Restricted)*:
-  - [Main Project Repo](https://github.ubc.ca/CMPE-O-246-001-O2024W2/PiEdgeML)
-  - [Website Repo](https://github.ubc.ca/CMPE-O-246-001-O2024W2/OpenStream)
 - 📽️ [Demo Video](http://www.youtube.com/watch?v=guBMEs41JM0)
 
 ---
