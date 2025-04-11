@@ -157,6 +157,8 @@ python3 run_stream.py
 
 ### `README.md`
 - Main documentation for the repository, including setup instructions and project description.
+  - [MLThing_README.md](https://github.com/superbolt08/OpenStream/blob/main/MLThing_README.md)
+  - [OpenStream_README.md](https://github.com/superbolt08/OpenStream/blob/main/OpenStream_README.md)
 
 ---
 ## ✅ Submission Checklist
