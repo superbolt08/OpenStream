@@ -169,7 +169,7 @@ The PiEdge Cloud platform addresses several practical use cases by leveraging a 
 ### `stream-server/`
 - Code/config for the video streaming server component.
 
-### `ml-server/`
+### `mlserver/`
 - Machine learning server for processing video data via API requests.
 
 ### `websocket/`
