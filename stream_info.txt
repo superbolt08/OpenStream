@@ -1,0 +1,9 @@
+example streamKey: <streamKey>
+
+HLS
+http://localhost:5080/WebRTCApp/streams/<streamKey>.m3u8
+http://localhost:5080/WebRTCApp/play.html?id=<streamKey>&playOrder=hls
+
+Display on another device
+http://<IP-ADDRESS>:5080/WebRTCApp/streams/<streamKey>.m3u8
+http://<IP-ADDRESS>:5080/WebRTCApp/play.html?id=<streamKey>&playOrder=hls

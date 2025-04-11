@@ -1,0 +1,68 @@
+/* Semi-transparent overlay that covers the entire screen */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  
+  /* The small popover container */
+  .modal {
+    background-color: black;
+    border: 1px solid ghostwhite;
+    padding: 0.75rem;
+    border-radius: 6px;
+    min-width: 220px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Simple form layout */
+  .form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Minimal label styling */
+  .label {
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+    color: ghostwhite;
+  }
+  
+  /* Simple input style */
+  .input {
+    padding: 0.4rem;
+    margin-bottom: 0.8rem;
+    border: 1px solid ghostwhite;
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+  
+  /* Button container */
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  /* Buttons styling */
+  .button {
+    font-weight: bold;
+    border: 1px solid #ccc;
+    background-color: transparent;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: ghostwhite; /* 👈 Add this line */
+  }  
+  
+  .button:hover {
+    background-color: #eeeeee46;
+  }
+  
