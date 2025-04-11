@@ -9,30 +9,30 @@ A cloud-based real-time video streaming and distributed computing platform built
 
 ## 🧠 Core Features
 
-- **Raspberry Pi Cluster (3 Nodes)**  
+- **Raspberry Pi Cluster (3 Nodes)**
   - Master node runs Kubernetes (K3s) for container orchestration  
   - High-speed Gigabit networking for distributed communication
 
-- **Wireless Video Capture & Processing**  
+- **Wireless Video Capture & Processing**
   - A Pi with Camera Module 3 streams video to the cluster  
   - Real-time ML tasks: face/object detection using TensorFlow
 
-- **Web Streaming Application**  
+- **Web Streaming Application**
   - Built with Next.js (React + TypeScript) and Node.js backend  
   - Live video feed and event-based messaging overlay
 
-- **Database Integration**  
+- **Database Integration**
   - Prisma ORM with MongoDB for real-time and persistent data  
   - Scalable design for future multi-user features
 
-- **Design Patterns Used**  
+- **Design Patterns Used**
   - Singleton (master node), Factory (node scaling), Strategy (ML models), Observer (stream updates), MVC (web app), Adapter (protocols)
 
 ---
 
 ## 📄 Documentation
 
-This repository maintains comprehensive documentation to support developers and stakeholders. The documentation covers setup instructions, architectural details, application usage, and project timelines. It is organized into several key documents:
+This repository maintains comprehensive documentation to support developers and stakeholders. The documentation covers setup instructions, architectural details, application usage, and project timelines. It is organized into several key documents and resources:
 
 - **README.md:**  
   Main documentation outlining the project overview, setup, and configuration.
@@ -45,6 +45,9 @@ This repository maintains comprehensive documentation to support developers and 
   
 - **Timeline_README.md:**  
   A timeline and milestone guide detailing our Agile sprints and project roadmap.
+  
+- **Images and Diagrams:**  
+  The [`images/`](images/) folder contains UML diagrams, architecture schematics, and other visual assets that support understanding of the project structure and system design.
 
 For quick access, please refer to the following links:  
 - [MLThing_README.md](https://github.com/superbolt08/OpenStream/blob/main/MLThing_README.md)  
@@ -159,9 +162,6 @@ The PiEdge Cloud platform addresses several practical use cases by leveraging a 
 
 ### `app/`
 - Website application, including frontend and backend code.
-
-### `images/`
-- UML diagrams, architecture schematics, and other project-related images.
 
 ### `prisma/`
 - Prisma ORM configuration and schema definitions for interacting with the MongoDB database.
