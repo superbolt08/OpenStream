@@ -43,41 +43,11 @@ A cloud-based real-time video streaming and distributed computing platform built
 - WSL
 - Docker Desktop
 
-### Setup Steps
-1. **Install WSL**
-
-Open CMD and run:
-```bash
-wsl --install
-```
-
-2. **Cluster Configuration**
-```bash
-cd cluster/scripts/
-./setup-k3s-master.sh
-./setup-k3s-worker.sh
-```
-3. **Deploy ML and Video Modules**
-```
-cd ml/streaming/
-python3 run_stream.py
-```
-4. **Run Web App Locally**
-```
-cd ml/streaming/
-python3 run_stream.py
-```
-5. **Deploy via Kubernetes**
-```
-cd ml/streaming/
-python3 run_stream.py
-```
-
 
 ## 📊 Architecture
 
 - **Cluster**: Raspberry Pi 4 nodes connected via a switch, using K3s  
-- **Streaming**: RTSP or WebRTC feeds processed in parallel  
+- **Streaming**:  WebRTC feeds processed in parallel  
 - **Web App**: User-friendly interface with dynamic video and event overlays  
 - **ML Tasks**: TensorFlow models for object recognition, adaptable with Strategy pattern  
 
@@ -110,43 +80,37 @@ python3 run_stream.py
 ---
 ## 🗂️ Directory Structure
 
-### `.github/`
-- GitHub-specific configurations and GitHub Actions workflows.
-
-### `antmedia/logs/`
-- Logs related to the Ant Media Server for managing video streams.
 
 ### `app/`
-- Core application logic (likely frontend/backend code).
+- Website application, including frontend and backend code.
 
 ### `images/`
-- UML Diagrams + Pictures + Architecture Diagram
-
-### `k8s/`
-- Kubernetes deployment files:
-  - `deployment.yaml`, `service.yaml`, `pv.yaml`, etc. for deploying containers, managing volumes, and services.
+- UML diagrams, architecture schematics, and other project-related images.
 
 ### `prisma/`
-- ORM configuration and Prisma schema for interacting with the MongoDB database.
+- Prisma ORM configuration and schema definitions for interacting with the MongoDB database.
 
-### `public/`
-- Static files for frontend serving (e.g., HTML, JavaScript, CSS).
-
-### `stream_server/`
+### `stream-server/`
 - Code/config for the video streaming server component.
 
+### `stream-server/`
+- Code/config for the video streaming server component.
+
+### `ml-server/`
+- Machine learning server for processing video data via API requests.
+
 ### `websocket/`
-- WebSocket logic for enabling real-time chat and stream communication.
+- WebSocket server responsible for real-time chat and stream-related communication.
 
 ---
 
 ## ⚙️ Configuration Files
 
-### `.example.env.development` & `.example.env.test`
+### `.example.env.development`
 - Example environment variable files for development and testing.
 
 ### `Dockerfile`
-- Docker configuration for building the project container image.
+- Docker configuration for building the project container image and container.
 
 ### `docker-compose.yaml`
 - Defines services, volumes, and networks to run the full application stack locally using Docker Compose.
@@ -179,71 +143,3 @@ This project is developed as part of a university course and is not licensed for
 
 📷 Powered by Raspberry Pi  
 ⚡ Fueled by curiosity and collaboration
-
-----------------------------
-
-*Miscellaneous*
-
-Install wsl in windows terminal (cmd):
-
-wsl --install
-
-----------------------------
-
-Make sure Docker Desktop is open for next steps
-
-----------------------------
-
-Install k3s on wsl Ubuntu (launch cmd and go to top right v sign to select Ubuntu):
-
-curl -sfL https://get.k3s.io | sh -
-
-----------------------------
-
-Start k3s:
-
-sudo systemctl start k3s
-
-sudo chmod 644 /etc/rancher/k3s/k3s.yaml
-
-export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
-
-----------------------------
-
-Naviagate to local repo in wsl:
-
-cd /mnt
-
-cd c
-
-cd [naviagate as needed]
-
-----------------------------
-
-To Run:
-
-kubectl apply -f .
-
-Check pod status:
-
-kubectl get pods -o wide
-
-Restart:
-
-kubectl delete --all services
-
-kubectl delete --all pods
-
-kubectl delete --all deployments
-
-----------------------------
-
-Debugging:
-
-kubectl describe pod
-
-kubectl get svc
-
-kubectl logs
-
-kubectl exec -it <pod-name> -- /bin/sh
