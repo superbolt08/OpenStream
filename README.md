@@ -30,6 +30,29 @@ A cloud-based real-time video streaming and distributed computing platform built
 
 ---
 
+## 📄 Documentation
+
+This repository maintains comprehensive documentation to support developers and stakeholders. The documentation covers setup instructions, architectural details, application usage, and project timelines. It is organized into several key documents:
+
+- **README.md:**  
+  Main documentation outlining the project overview, setup, and configuration.
+  
+- **MLThing_README.md:**  
+  Detailed instructions related to the machine learning components.
+  
+- **OpenStream_README.md:**  
+  Core documentation for the web streaming application and related services.
+  
+- **Timeline_README.md:**  
+  A timeline and milestone guide detailing our Agile sprints and project roadmap.
+
+For quick access, please refer to the following links:  
+- [MLThing_README.md](https://github.com/superbolt08/OpenStream/blob/main/MLThing_README.md)  
+- [OpenStream_README.md](https://github.com/superbolt08/OpenStream/blob/main/OpenStream_README.md)  
+- [Timeline_README.md](https://github.com/superbolt08/OpenStream/blob/main/Timeline_README.md)
+
+---
+
 ## 👥 Team Members
 
 | **Name**         | **Role**                                                                                     |
@@ -165,16 +188,6 @@ The PiEdge Cloud platform addresses several practical use cases by leveraging a 
 ### `docker-compose.yaml`
 - Defines services, volumes, and networks to run the full application stack locally using Docker Compose.
 
----
-
-## 📄 Documentation
-
-### `README.md`
-- Main documentation for the repository, including setup instructions and project description.
-  - [MLThing_README.md](https://github.com/superbolt08/OpenStream/blob/main/MLThing_README.md)
-  - [OpenStream_README.md](https://github.com/superbolt08/OpenStream/blob/main/OpenStream_README.md)
-  - [Timeline_README.md](https://github.com/superbolt08/OpenStream/blob/main/Timeline_README.md)
-    
 ---
 
 ## ✅ Submission Checklist
