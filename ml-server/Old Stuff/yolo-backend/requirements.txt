@@ -1,0 +1,8 @@
+fastapi==0.110.0
+uvicorn[standard]==0.29.0
+pymongo==4.6.1
+pyzmq==25.1.2
+opencv-python-headless==4.8.0.76
+torch==2.2.1
+numpy==1.26.4
+yt-dlp==2024.3.10

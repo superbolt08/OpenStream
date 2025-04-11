@@ -1,0 +1,12 @@
+# Core ML and YOLOv5
+torch>=1.12.0          # Use 1.12+ for better Python 3.10 compatibility
+Pillow>=9.0.0
+opencv-python>=4.5.5
+pandas>=1.3.5
+requests>=2.26.0
+matplotlib>=3.5.0
+PyYAML>=5.4.1
+
+# Messaging and database
+pyzmq>=22.3.0
+pymongo>=4.0.0
