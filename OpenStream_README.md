@@ -33,7 +33,7 @@ Ensure that Docker is running and Node.js is installed on your computer. Then fo
    - Confirm that `.env.development` is created and populated.
    - Build and start all services by running:
      ```bash
-     docker compose up -d
+     docker compose up
      npm run app:build   # (If not already built)
      npm run app:start
      ```
